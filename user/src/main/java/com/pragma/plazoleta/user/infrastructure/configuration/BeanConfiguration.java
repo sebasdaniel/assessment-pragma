@@ -1,9 +1,9 @@
 package com.pragma.plazoleta.user.infrastructure.configuration;
 
-import com.pragma.plazoleta.user.domain.api.IObjectServicePort;
-import com.pragma.plazoleta.user.domain.spi.IObjectPersistencePort;
-import com.pragma.plazoleta.user.domain.usecase.ObjectUseCase;
-import com.pragma.plazoleta.user.infrastructure.out.jpa.adapter.ObjectJpaAdapter;
+import com.pragma.plazoleta.user.domain.api.IUserServicePort;
+import com.pragma.plazoleta.user.domain.spi.IUserPersistencePort;
+import com.pragma.plazoleta.user.domain.usecase.UserUseCase;
+import com.pragma.plazoleta.user.infrastructure.out.jpa.adapter.UserJpaAdapter;
 import com.pragma.plazoleta.user.infrastructure.out.jpa.mapper.IObjectEntityMapper;
 import com.pragma.plazoleta.user.infrastructure.out.jpa.repository.IObjectRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,12 +17,12 @@ public class BeanConfiguration {
     private final IObjectEntityMapper objectEntityMapper;
 
     @Bean
-    public IObjectPersistencePort objectPersistencePort() {
-        return new ObjectJpaAdapter(objectRepository, objectEntityMapper);
+    public IUserPersistencePort objectPersistencePort() {
+        return new UserJpaAdapter(objectRepository, objectEntityMapper);
     }
 
     @Bean
-    public IObjectServicePort objectServicePort() {
-        return new ObjectUseCase(objectPersistencePort());
+    public IUserServicePort objectServicePort() {
+        return new UserUseCase(objectPersistencePort());
     }
 }

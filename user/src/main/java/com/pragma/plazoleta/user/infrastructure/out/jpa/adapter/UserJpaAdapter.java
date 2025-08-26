@@ -1,7 +1,7 @@
 package com.pragma.plazoleta.user.infrastructure.out.jpa.adapter;
 
-import com.pragma.plazoleta.user.domain.model.ObjectModel;
-import com.pragma.plazoleta.user.domain.spi.IObjectPersistencePort;
+import com.pragma.plazoleta.user.domain.model.User;
+import com.pragma.plazoleta.user.domain.spi.IUserPersistencePort;
 import com.pragma.plazoleta.user.infrastructure.exception.NoDataFoundException;
 import com.pragma.plazoleta.user.infrastructure.out.jpa.entity.ObjectEntity;
 import com.pragma.plazoleta.user.infrastructure.out.jpa.mapper.IObjectEntityMapper;
@@ -11,20 +11,20 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 
 @RequiredArgsConstructor
-public class ObjectJpaAdapter implements IObjectPersistencePort {
+public class UserJpaAdapter implements IUserPersistencePort {
 
     private final IObjectRepository objectRepository;
     private final IObjectEntityMapper objectEntityMapper;
 
 
     @Override
-    public ObjectModel saveObject(ObjectModel objectModel) {
-        ObjectEntity objectEntity = objectRepository.save(objectEntityMapper.toEntity(objectModel));
+    public User saveUser(User user) {
+        ObjectEntity objectEntity = objectRepository.save(objectEntityMapper.toEntity(user));
         return objectEntityMapper.toObjectModel(objectEntity);
     }
 
     @Override
-    public List<ObjectModel> getAllObjects() {
+    public List<User> getAllUsers() {
         List<ObjectEntity> entityList = objectRepository.findAll();
         if (entityList.isEmpty()) {
             throw new NoDataFoundException();
