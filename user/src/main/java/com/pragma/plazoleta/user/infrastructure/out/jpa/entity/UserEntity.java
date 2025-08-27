@@ -11,19 +11,33 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.time.LocalDate;
 
 @Entity
-@Table(name = "objectTable")
+@Table(name = "user")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class ObjectEntity {
+public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "object_id", nullable = false)
+    @Column(name = "user_id", nullable = false)
     private Long id;
 
-    @Column(length = 50)
+    @Column(length = 30)
     private String name;
+
+    @Column(length = 30)
+    private String lastName;
+
+    private Integer idNumber;
+
+    @Column(length = 13)
+    private String phoneNumber;
+
+    private LocalDate birthdate;
+    private String email;
+    private String password;
+    private String role;
 }

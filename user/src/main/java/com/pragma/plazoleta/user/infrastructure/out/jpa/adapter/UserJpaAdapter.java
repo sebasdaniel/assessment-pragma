@@ -3,9 +3,9 @@ package com.pragma.plazoleta.user.infrastructure.out.jpa.adapter;
 import com.pragma.plazoleta.user.domain.model.User;
 import com.pragma.plazoleta.user.domain.spi.IUserPersistencePort;
 import com.pragma.plazoleta.user.infrastructure.exception.NoDataFoundException;
-import com.pragma.plazoleta.user.infrastructure.out.jpa.entity.ObjectEntity;
-import com.pragma.plazoleta.user.infrastructure.out.jpa.mapper.IObjectEntityMapper;
-import com.pragma.plazoleta.user.infrastructure.out.jpa.repository.IObjectRepository;
+import com.pragma.plazoleta.user.infrastructure.out.jpa.entity.UserEntity;
+import com.pragma.plazoleta.user.infrastructure.out.jpa.mapper.IUserEntityMapper;
+import com.pragma.plazoleta.user.infrastructure.out.jpa.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -13,19 +13,19 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserJpaAdapter implements IUserPersistencePort {
 
-    private final IObjectRepository objectRepository;
-    private final IObjectEntityMapper objectEntityMapper;
+    private final IUserRepository userRepository;
+    private final IUserEntityMapper objectEntityMapper;
 
 
     @Override
     public User saveUser(User user) {
-        ObjectEntity objectEntity = objectRepository.save(objectEntityMapper.toEntity(user));
-        return objectEntityMapper.toObjectModel(objectEntity);
+        UserEntity userEntity = userRepository.save(objectEntityMapper.toEntity(user));
+        return objectEntityMapper.toModel(userEntity);
     }
 
     @Override
     public List<User> getAllUsers() {
-        List<ObjectEntity> entityList = objectRepository.findAll();
+        List<UserEntity> entityList = userRepository.findAll();
         if (entityList.isEmpty()) {
             throw new NoDataFoundException();
         }

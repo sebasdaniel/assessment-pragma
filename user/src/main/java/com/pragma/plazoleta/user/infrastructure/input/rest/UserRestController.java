@@ -21,23 +21,25 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/object")
+@RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
-public class ObjectRestController {
+public class UserRestController {
 
-    private final IUserHandler objectHandler;
+    private final IUserHandler userHandler;
 
-    @Operation(summary = "Add a new object")
+    @Operation(summary = "Add a new user")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Object created", content = @Content),
-            @ApiResponse(responseCode = "409", description = "Object already exists", content = @Content)
+            @ApiResponse(responseCode = "201", description = "User created", content = @Content),
+            @ApiResponse(responseCode = "409", description = "User already exists", content = @Content)
     })
-    @PostMapping("/")
-    public ResponseEntity<Void> saveObject(@RequestBody UserRequestDto userRequestDto) {
-        objectHandler.saveUserOwner(userRequestDto);
+    @PostMapping("/owner")
+    public ResponseEntity<Void> saveUserOwner(@RequestBody UserRequestDto userRequestDto) {
+        userHandler.saveUserOwner(userRequestDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    
+    // ==== Pending validation of usage ====
     @Operation(summary = "Get all objects")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "All objects returned",
@@ -47,7 +49,7 @@ public class ObjectRestController {
     })
     @GetMapping("/")
     public ResponseEntity<List<UserResponseDto>> getAllObjects() {
-        return ResponseEntity.ok(objectHandler.getAllUsers());
+        return ResponseEntity.ok(userHandler.getAllUsers());
     }
 
 }
