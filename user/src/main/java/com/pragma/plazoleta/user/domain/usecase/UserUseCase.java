@@ -3,6 +3,7 @@ package com.pragma.plazoleta.user.domain.usecase;
 import com.pragma.plazoleta.user.domain.api.IUserServicePort;
 import com.pragma.plazoleta.user.domain.exception.DomainException;
 import com.pragma.plazoleta.user.domain.model.User;
+import com.pragma.plazoleta.user.domain.spi.IBcryptEncoderPort;
 import com.pragma.plazoleta.user.domain.spi.IUserPersistencePort;
 
 import java.util.List;
@@ -12,16 +13,24 @@ public class UserUseCase implements IUserServicePort {
     private static final String OWNER_ROLE = "propietario";
 
     private final IUserPersistencePort userPersistencePort;
+    private final IBcryptEncoderPort bcryptEncoderPort;
 
-    public UserUseCase(IUserPersistencePort userPersistencePort) {
+    public UserUseCase(
+            IUserPersistencePort userPersistencePort,
+            IBcryptEncoderPort bcryptEncoderPort
+    ) {
         this.userPersistencePort = userPersistencePort;
+        this.bcryptEncoderPort = bcryptEncoderPort;
     }
 
     @Override
     public void saveOwner(User user) {
         validateOwnerUser(user);
 
+        var encodedPassword = bcryptEncoderPort.encode(user.getPassword());
+
         user.setRole(OWNER_ROLE);
+        user.setPassword(encodedPassword);
 
         userPersistencePort.saveUser(user);
     }
