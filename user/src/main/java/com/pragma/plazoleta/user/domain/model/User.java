@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 public class User {
 
     private static final Pattern PHONE_PATTERN = Pattern.compile("^\\+?\\d{1,12}$");
-    private static final Pattern BCRYPT_PATTERN = Pattern.compile("\\A\\$2a?\\$\\d\\d\\$[./0-9A-Za-z]{53}");
+    //private static final Pattern BCRYPT_PATTERN = Pattern.compile("\\A\\$2a?\\$\\d\\d\\$[./0-9A-Za-z]{53}");
 
     private Long id;
     private String name;
@@ -36,9 +36,9 @@ public class User {
         return PHONE_PATTERN.matcher(this.phoneNumber).matches();
     }
 
-    public boolean isBcryptPassword() {
-        return BCRYPT_PATTERN.matcher(password).matches();
-    }
+//    public boolean isBcryptPassword() {
+//        return BCRYPT_PATTERN.matcher(password).matches();
+//    }
 
     public int getAge() {
         LocalDate currentDate = LocalDate.now();
