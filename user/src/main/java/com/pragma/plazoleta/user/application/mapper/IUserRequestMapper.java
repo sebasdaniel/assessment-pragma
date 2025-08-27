@@ -1,17 +1,13 @@
 package com.pragma.plazoleta.user.application.mapper;
 
-import com.pragma.plazoleta.user.application.dto.response.ObjectResponseDto;
+import com.pragma.plazoleta.user.application.dto.request.UserRequestDto;
 import com.pragma.plazoleta.user.domain.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
-import java.util.List;
-
 @Mapper(componentModel = "spring",
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
         unmappedSourcePolicy = ReportingPolicy.IGNORE)
-public interface IObjectResponseMapper {
-    ObjectResponseDto toResponse(User user);
-
-    List<ObjectResponseDto> toResponseList(List<User> userList);
+public interface IUserRequestMapper {
+    User toUser(UserRequestDto userRequestDto);
 }
