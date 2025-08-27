@@ -1,6 +1,6 @@
 package com.pragma.plazoleta.infrastructure.out.jpa.mapper;
 
-import com.pragma.plazoleta.domain.model.ObjectModel;
+import com.pragma.plazoleta.domain.model.Restaurant;
 import com.pragma.plazoleta.infrastructure.out.jpa.entity.ObjectEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
@@ -13,7 +13,7 @@ import java.util.List;
 )
 public interface IObjectEntityMapper {
 
-    ObjectEntity toEntity(ObjectModel user);
-    ObjectModel toObjectModel(ObjectEntity objectEntity);
-    List<ObjectModel> toObjectModelList(List<ObjectEntity> userEntityList);
+    ObjectEntity toEntity(Restaurant user);
+    Restaurant toObjectModel(ObjectEntity objectEntity);
+    List<Restaurant> toObjectModelList(List<ObjectEntity> userEntityList);
 }

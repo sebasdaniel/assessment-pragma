@@ -1,7 +1,7 @@
 package com.pragma.plazoleta.application.mapper;
 
 import com.pragma.plazoleta.application.dto.response.ObjectResponseDto;
-import com.pragma.plazoleta.domain.model.ObjectModel;
+import com.pragma.plazoleta.domain.model.Restaurant;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
@@ -11,7 +11,7 @@ import java.util.List;
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
         unmappedSourcePolicy = ReportingPolicy.IGNORE)
 public interface IObjectResponseMapper {
-    ObjectResponseDto toResponse(ObjectModel objectModel);
+    ObjectResponseDto toResponse(Restaurant restaurant);
 
-    List<ObjectResponseDto> toResponseList(List<ObjectModel> objectModelList);
+    List<ObjectResponseDto> toResponseList(List<Restaurant> restaurantList);
 }

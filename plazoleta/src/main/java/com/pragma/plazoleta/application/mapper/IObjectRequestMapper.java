@@ -1,7 +1,7 @@
 package com.pragma.plazoleta.application.mapper;
 
 import com.pragma.plazoleta.application.dto.request.ObjectRequestDto;
-import com.pragma.plazoleta.domain.model.ObjectModel;
+import com.pragma.plazoleta.domain.model.Restaurant;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
@@ -9,5 +9,5 @@ import org.mapstruct.ReportingPolicy;
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
         unmappedSourcePolicy = ReportingPolicy.IGNORE)
 public interface IObjectRequestMapper {
-    ObjectModel toObject(ObjectRequestDto objectRequestDto);
+    Restaurant toObject(ObjectRequestDto objectRequestDto);
 }

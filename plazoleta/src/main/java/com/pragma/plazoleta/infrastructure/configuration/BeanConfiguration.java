@@ -1,9 +1,9 @@
 package com.pragma.plazoleta.infrastructure.configuration;
 
-import com.pragma.plazoleta.domain.api.IObjectServicePort;
-import com.pragma.plazoleta.domain.spi.IObjectPersistencePort;
-import com.pragma.plazoleta.domain.usecase.ObjectUseCase;
-import com.pragma.plazoleta.infrastructure.out.jpa.adapter.ObjectJpaAdapter;
+import com.pragma.plazoleta.domain.api.IRestaurantServicePort;
+import com.pragma.plazoleta.domain.spi.IRestaurantPersistencePort;
+import com.pragma.plazoleta.domain.usecase.RestaurantUseCase;
+import com.pragma.plazoleta.infrastructure.out.jpa.adapter.RestaurantJpaAdapter;
 import com.pragma.plazoleta.infrastructure.out.jpa.mapper.IObjectEntityMapper;
 import com.pragma.plazoleta.infrastructure.out.jpa.repository.IObjectRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,12 +17,12 @@ public class BeanConfiguration {
     private final IObjectEntityMapper objectEntityMapper;
 
     @Bean
-    public IObjectPersistencePort objectPersistencePort() {
-        return new ObjectJpaAdapter(objectRepository, objectEntityMapper);
+    public IRestaurantPersistencePort objectPersistencePort() {
+        return new RestaurantJpaAdapter(objectRepository, objectEntityMapper);
     }
 
     @Bean
-    public IObjectServicePort objectServicePort() {
-        return new ObjectUseCase(objectPersistencePort());
+    public IRestaurantServicePort objectServicePort() {
+        return new RestaurantUseCase(objectPersistencePort());
     }
 }
