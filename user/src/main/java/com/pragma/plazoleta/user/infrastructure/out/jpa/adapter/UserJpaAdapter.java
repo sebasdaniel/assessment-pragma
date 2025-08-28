@@ -7,20 +7,18 @@ import com.pragma.plazoleta.user.infrastructure.out.jpa.entity.UserEntity;
 import com.pragma.plazoleta.user.infrastructure.out.jpa.mapper.IUserEntityMapper;
 import com.pragma.plazoleta.user.infrastructure.out.jpa.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
-
 import java.util.List;
 
 @RequiredArgsConstructor
 public class UserJpaAdapter implements IUserPersistencePort {
 
     private final IUserRepository userRepository;
-    private final IUserEntityMapper objectEntityMapper;
-
+    private final IUserEntityMapper userEntityMapper;
 
     @Override
     public User saveUser(User user) {
-        UserEntity userEntity = userRepository.save(objectEntityMapper.toEntity(user));
-        return objectEntityMapper.toModel(userEntity);
+        UserEntity userEntity = userRepository.save(userEntityMapper.toEntity(user));
+        return userEntityMapper.toModel(userEntity);
     }
 
     @Override
@@ -29,6 +27,6 @@ public class UserJpaAdapter implements IUserPersistencePort {
         if (entityList.isEmpty()) {
             throw new NoDataFoundException();
         }
-        return objectEntityMapper.toObjectModelList(entityList);
+        return userEntityMapper.toObjectModelList(entityList);
     }
 }
