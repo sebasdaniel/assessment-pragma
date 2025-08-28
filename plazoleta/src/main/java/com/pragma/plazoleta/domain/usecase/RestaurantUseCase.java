@@ -1,14 +1,19 @@
 package com.pragma.plazoleta.domain.usecase;
 
 import com.pragma.plazoleta.domain.api.IRestaurantServicePort;
+import com.pragma.plazoleta.domain.exception.DataFormatException;
 import com.pragma.plazoleta.domain.exception.DomainException;
+import com.pragma.plazoleta.domain.exception.RequiredDataException;
 import com.pragma.plazoleta.domain.model.Restaurant;
 import com.pragma.plazoleta.domain.spi.IRestaurantPersistencePort;
 import com.pragma.plazoleta.domain.spi.IUserServicePort;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class RestaurantUseCase implements IRestaurantServicePort {
+
+    private static final Pattern PHONE_PATTERN = Pattern.compile("^\\+?\\d{1,12}$");
 
     private final IRestaurantPersistencePort restaurantPersistencePort;
     private final IUserServicePort userServicePort;
@@ -24,15 +29,15 @@ public class RestaurantUseCase implements IRestaurantServicePort {
     @Override
     public void saveRestaurant(Restaurant restaurant) {
         if (!haveRestaurantValidData(restaurant)) {
-            throw new DomainException("One or more required data not present");
+            throw new RequiredDataException("One or more required data not present");
         }
 
-        if (!restaurant.isValidPhoneNumber()) {
-            throw new DomainException("Phone number is not valid");
+        if (!isValidPhoneNumber(restaurant.getPhoneNumber())) {
+            throw new DataFormatException("Phone number is not valid");
         }
 
-        if (!restaurant.isValidName()) {
-            throw new DomainException("Name could not be only numbers");
+        if (!isValidRestaurantName(restaurant.getName())) {
+            throw new DataFormatException("Name could not be only numbers");
         }
 
         if (!userServicePort.userExists(restaurant.getOwnerId())) {
@@ -51,5 +56,18 @@ public class RestaurantUseCase implements IRestaurantServicePort {
         return restaurant.getNit() != null && restaurant.getName() != null && restaurant.getAddress() != null
                 && restaurant.getPhoneNumber() != null && restaurant.getUrlLogo() != null
                 && restaurant.getOwnerId() != null;
+    }
+
+    private boolean isValidRestaurantName(String name){
+        try {
+            Integer.parseInt(name);
+            return false;
+        } catch (NumberFormatException e) {
+            return true;
+        }
+    }
+
+    private boolean isValidPhoneNumber(String phoneNumber) {
+        return PHONE_PATTERN.matcher(phoneNumber).matches();
     }
 }
