@@ -1,10 +1,10 @@
 package com.pragma.plazoleta.user.infrastructure.configuration;
 
 import com.pragma.plazoleta.user.domain.api.IUserServicePort;
-import com.pragma.plazoleta.user.domain.spi.IBcryptEncoderPort;
+import com.pragma.plazoleta.user.domain.spi.IPasswordEncoderPort;
 import com.pragma.plazoleta.user.domain.spi.IUserPersistencePort;
 import com.pragma.plazoleta.user.domain.usecase.UserUseCase;
-import com.pragma.plazoleta.user.infrastructure.out.encoder.adapter.BcryptEncoderAdapter;
+import com.pragma.plazoleta.user.infrastructure.out.encoder.adapter.PasswordEncoderAdapter;
 import com.pragma.plazoleta.user.infrastructure.out.jpa.adapter.UserJpaAdapter;
 import com.pragma.plazoleta.user.infrastructure.out.jpa.mapper.IUserEntityMapper;
 import com.pragma.plazoleta.user.infrastructure.out.jpa.repository.IUserRepository;
@@ -30,8 +30,8 @@ public class BeanConfiguration {
     }
 
     @Bean
-    public IBcryptEncoderPort bcryptEncoderPort() {
-        return new BcryptEncoderAdapter(passwordEncoder());
+    public IPasswordEncoderPort bcryptEncoderPort() {
+        return new PasswordEncoderAdapter(passwordEncoder());
     }
 
     @Bean

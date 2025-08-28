@@ -3,7 +3,7 @@ package com.pragma.plazoleta.user.domain.usecase;
 
 import com.pragma.plazoleta.user.domain.exception.DomainException;
 import com.pragma.plazoleta.user.domain.model.User;
-import com.pragma.plazoleta.user.domain.spi.IBcryptEncoderPort;
+import com.pragma.plazoleta.user.domain.spi.IPasswordEncoderPort;
 import com.pragma.plazoleta.user.domain.spi.IUserPersistencePort;
 import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +18,7 @@ import static org.mockito.Mockito.when;
 class UserUseCaseTest {
 
     private final IUserPersistencePort userPersistencePortMock = Mockito.mock(IUserPersistencePort.class);
-    private final IBcryptEncoderPort bcryptEncoderPortMock = Mockito.mock(IBcryptEncoderPort.class);
+    private final IPasswordEncoderPort bcryptEncoderPortMock = Mockito.mock(IPasswordEncoderPort.class);
 
     private final UserUseCase userUseCase = new UserUseCase(userPersistencePortMock, bcryptEncoderPortMock);
 

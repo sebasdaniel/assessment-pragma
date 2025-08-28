@@ -1,5 +1,5 @@
 package com.pragma.plazoleta.user.domain.spi;
 
-public interface IBcryptEncoderPort {
+public interface IPasswordEncoderPort {
     String encode(String text);
 }

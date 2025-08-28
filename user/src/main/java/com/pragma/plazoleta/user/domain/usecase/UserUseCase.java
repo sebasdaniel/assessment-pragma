@@ -1,13 +1,11 @@
 package com.pragma.plazoleta.user.domain.usecase;
 
 import com.pragma.plazoleta.user.domain.api.IUserServicePort;
-import com.pragma.plazoleta.user.domain.exception.DomainException;
 import com.pragma.plazoleta.user.domain.exception.InvalidFormatException;
 import com.pragma.plazoleta.user.domain.exception.MissingDataException;
 import com.pragma.plazoleta.user.domain.model.User;
-import com.pragma.plazoleta.user.domain.spi.IBcryptEncoderPort;
+import com.pragma.plazoleta.user.domain.spi.IPasswordEncoderPort;
 import com.pragma.plazoleta.user.domain.spi.IUserPersistencePort;
-
 import java.util.List;
 
 public class UserUseCase implements IUserServicePort {
@@ -15,21 +13,21 @@ public class UserUseCase implements IUserServicePort {
     private static final String OWNER_ROLE = "propietario";
 
     private final IUserPersistencePort userPersistencePort;
-    private final IBcryptEncoderPort bcryptEncoderPort;
+    private final IPasswordEncoderPort passwordEncoderPort;
 
     public UserUseCase(
             IUserPersistencePort userPersistencePort,
-            IBcryptEncoderPort bcryptEncoderPort
+            IPasswordEncoderPort passwordEncoderPort
     ) {
         this.userPersistencePort = userPersistencePort;
-        this.bcryptEncoderPort = bcryptEncoderPort;
+        this.passwordEncoderPort = passwordEncoderPort;
     }
 
     @Override
     public void saveOwner(User user) {
         validateOwnerUser(user);
 
-        var encodedPassword = bcryptEncoderPort.encode(user.getPassword());
+        var encodedPassword = passwordEncoderPort.encode(user.getPassword());
 
         user.setRole(OWNER_ROLE);
         user.setPassword(encodedPassword);
