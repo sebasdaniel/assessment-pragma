@@ -1,22 +1,17 @@
 package com.pragma.plazoleta.user.domain.model;
 
+import java.time.LocalDate;
+import java.time.Period;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.LocalDate;
-import java.time.Period;
-import java.util.regex.Pattern;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
-
-    private static final Pattern PHONE_PATTERN = Pattern.compile("^\\+?\\d{1,12}$");
-    //private static final Pattern BCRYPT_PATTERN = Pattern.compile("\\A\\$2a?\\$\\d\\d\\$[./0-9A-Za-z]{53}");
 
     private Long id;
     private String name;
@@ -28,29 +23,10 @@ public class User {
     private String password;
     private String role;
 
-    public boolean isValidEmail() {
-        return this.email.contains("@");
-    }
-
-    public boolean isValidPhoneNumber() {
-        return PHONE_PATTERN.matcher(this.phoneNumber).matches();
-    }
-
-//    public boolean isBcryptPassword() {
-//        return BCRYPT_PATTERN.matcher(password).matches();
-//    }
-
     public int getAge() {
         LocalDate currentDate = LocalDate.now();
-        if (birthdate.isAfter(currentDate)) {
-            throw new IllegalArgumentException("Birthdate cannot be in the future.");
-        }
-
         Period period = Period.between(birthdate, currentDate);
-        return period.getYears();
-    }
 
-    public boolean hasLegalAge() {
-        return getAge() >= 18;
+        return period.getYears();
     }
 }
