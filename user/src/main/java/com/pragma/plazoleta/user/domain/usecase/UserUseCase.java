@@ -37,11 +37,6 @@ public class UserUseCase implements IUserServicePort {
         userPersistencePort.saveUser(user);
     }
 
-    @Override
-    public List<User> getAllUsers() {
-        return userPersistencePort.getAllUsers();
-    }
-
     private void validateOwnerUser(User user) {
         if (!haveOwnerRequiredData(user)) {
             throw new MissingDataException("One or more required fields are missing");
