@@ -1,7 +1,7 @@
 package com.pragma.plazoleta.user.domain.usecase;
 
-
-import com.pragma.plazoleta.user.domain.exception.DomainException;
+import com.pragma.plazoleta.user.domain.exception.InvalidFormatException;
+import com.pragma.plazoleta.user.domain.exception.MissingDataException;
 import com.pragma.plazoleta.user.domain.model.User;
 import com.pragma.plazoleta.user.domain.spi.IPasswordEncoderPort;
 import com.pragma.plazoleta.user.domain.spi.IUserPersistencePort;
@@ -46,7 +46,7 @@ class UserUseCaseTest {
         defaultUser.setPassword(null);
 
         // Act - Assert
-        assertThrows(DomainException.class, () -> userUseCase.saveOwner(defaultUser));
+        assertThrows(MissingDataException.class, () -> userUseCase.saveOwner(defaultUser));
     }
 
     @Test
@@ -55,7 +55,7 @@ class UserUseCaseTest {
         defaultUser.setEmail("testemail.com");
 
         // Act - Assert
-        assertThrows(DomainException.class, () -> userUseCase.saveOwner(defaultUser));
+        assertThrows(InvalidFormatException.class, () -> userUseCase.saveOwner(defaultUser));
     }
 
     @Test
@@ -64,7 +64,7 @@ class UserUseCaseTest {
         defaultUser.setPhoneNumber("+57 (301) 12345567");
 
         // Act - Assert
-        assertThrows(DomainException.class, () -> userUseCase.saveOwner(defaultUser));
+        assertThrows(InvalidFormatException.class, () -> userUseCase.saveOwner(defaultUser));
     }
 
     @Test
@@ -74,7 +74,7 @@ class UserUseCaseTest {
         defaultUser.setBirthdate(notLegalAge);
 
         // Act - Assert
-        assertThrows(DomainException.class, () -> userUseCase.saveOwner(defaultUser));
+        assertThrows(InvalidFormatException.class, () -> userUseCase.saveOwner(defaultUser));
     }
 
     @Test
