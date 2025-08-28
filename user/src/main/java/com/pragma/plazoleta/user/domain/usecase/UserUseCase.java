@@ -2,6 +2,8 @@ package com.pragma.plazoleta.user.domain.usecase;
 
 import com.pragma.plazoleta.user.domain.api.IUserServicePort;
 import com.pragma.plazoleta.user.domain.exception.DomainException;
+import com.pragma.plazoleta.user.domain.exception.InvalidFormatException;
+import com.pragma.plazoleta.user.domain.exception.MissingDataException;
 import com.pragma.plazoleta.user.domain.model.User;
 import com.pragma.plazoleta.user.domain.spi.IBcryptEncoderPort;
 import com.pragma.plazoleta.user.domain.spi.IUserPersistencePort;
@@ -42,19 +44,19 @@ public class UserUseCase implements IUserServicePort {
 
     private void validateOwnerUser(User user) {
         if (!haveOwnerRequiredData(user)) {
-            throw new DomainException("One or more required fields are missing");
+            throw new MissingDataException("One or more required fields are missing");
         }
 
         if (!user.isValidEmail()) {
-            throw new DomainException("Invalid email format");
+            throw new InvalidFormatException("Invalid email format");
         }
 
         if (!user.isValidPhoneNumber()) {
-            throw new DomainException("Invalid phone number format");
+            throw new InvalidFormatException("Invalid phone number format");
         }
 
         if (!user.hasLegalAge()) {
-            throw new DomainException("User age must be 18 or more");
+            throw new InvalidFormatException("User age must be 18 or more");
         }
     }
 
