@@ -6,7 +6,6 @@ import com.pragma.plazoleta.user.domain.exception.MissingDataException;
 import com.pragma.plazoleta.user.domain.model.User;
 import com.pragma.plazoleta.user.domain.spi.IPasswordEncoderPort;
 import com.pragma.plazoleta.user.domain.spi.IUserPersistencePort;
-import java.util.List;
 import java.util.regex.Pattern;
 
 public class UserUseCase implements IUserServicePort {
