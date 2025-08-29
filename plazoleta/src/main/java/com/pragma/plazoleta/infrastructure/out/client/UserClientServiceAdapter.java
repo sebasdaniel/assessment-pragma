@@ -4,8 +4,8 @@ import com.pragma.plazoleta.domain.spi.IUserServicePort;
 
 public class UserClientServiceAdapter implements IUserServicePort {
     @Override
-    public boolean userExists(Long id) {
+    public String getUserRole(Long userId) {
         //TODO: implement method
-        return false;
+        return null;
     }
 }

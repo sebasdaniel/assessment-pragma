@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 public class RestaurantUseCase implements IRestaurantServicePort {
 
     private static final Pattern PHONE_PATTERN = Pattern.compile("^\\+?\\d{1,12}$");
+    private static final String OWNER_ROLE = "propietario";
 
     private final IRestaurantPersistencePort restaurantPersistencePort;
     private final IUserServicePort userServicePort;
@@ -40,8 +41,13 @@ public class RestaurantUseCase implements IRestaurantServicePort {
             throw new DataFormatException("Name could not be only numbers");
         }
 
-        if (!userServicePort.userExists(restaurant.getOwnerId())) {
+        var userRole = userServicePort.getUserRole(restaurant.getOwnerId());
+        if (userRole == null) {
             throw new DomainException("The owner does not exist");
+        }
+
+        if (!OWNER_ROLE.equalsIgnoreCase(userRole)) {
+            throw new DomainException("The user does not have the right role");
         }
 
         restaurantPersistencePort.saveRestaurant(restaurant);
