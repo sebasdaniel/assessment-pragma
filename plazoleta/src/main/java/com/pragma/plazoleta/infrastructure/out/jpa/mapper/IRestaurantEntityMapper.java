@@ -1,7 +1,7 @@
 package com.pragma.plazoleta.infrastructure.out.jpa.mapper;
 
 import com.pragma.plazoleta.domain.model.Restaurant;
-import com.pragma.plazoleta.infrastructure.out.jpa.entity.ObjectEntity;
+import com.pragma.plazoleta.infrastructure.out.jpa.entity.RestaurantEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
@@ -11,9 +11,9 @@ import java.util.List;
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
         unmappedSourcePolicy = ReportingPolicy.IGNORE
 )
-public interface IObjectEntityMapper {
+public interface IRestaurantEntityMapper {
 
-    ObjectEntity toEntity(Restaurant user);
-    Restaurant toObjectModel(ObjectEntity objectEntity);
-    List<Restaurant> toObjectModelList(List<ObjectEntity> userEntityList);
+    RestaurantEntity toEntity(Restaurant restaurant);
+    Restaurant toRestaurantModel(RestaurantEntity restaurantEntity);
+    List<Restaurant> toObjectModelList(List<RestaurantEntity> userEntityList);
 }

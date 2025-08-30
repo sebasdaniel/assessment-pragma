@@ -25,7 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ObjectRestController {
 
-    private final IRestaurantHandler objectHandler;
+    private final IRestaurantHandler restaurantHandler;
 
     @Operation(summary = "Add a new object")
     @ApiResponses(value = {
@@ -33,8 +33,8 @@ public class ObjectRestController {
             @ApiResponse(responseCode = "409", description = "Object already exists", content = @Content)
     })
     @PostMapping("/")
-    public ResponseEntity<Void> saveObject(@RequestBody RestaurantRequestDto restaurantRequestDto) {
-        objectHandler.saveRestaurant(restaurantRequestDto);
+    public ResponseEntity<Void> saveRestaurant(@RequestBody RestaurantRequestDto restaurantRequestDto) {
+        restaurantHandler.saveRestaurant(restaurantRequestDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -47,7 +47,7 @@ public class ObjectRestController {
     })
     @GetMapping("/")
     public ResponseEntity<List<RestaurantResponseDto>> getAllObjects() {
-        return ResponseEntity.ok(objectHandler.getAllObjects());
+        return ResponseEntity.ok(restaurantHandler.getAllObjects());
     }
 
 }
