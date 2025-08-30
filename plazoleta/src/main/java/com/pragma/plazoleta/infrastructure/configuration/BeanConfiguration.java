@@ -15,12 +15,12 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @RequiredArgsConstructor
 public class BeanConfiguration {
-    private final IRestaurantRepository objectRepository;
-    private final IRestaurantEntityMapper objectEntityMapper;
+    private final IRestaurantRepository restaurantRepository;
+    private final IRestaurantEntityMapper restaurantEntityMapper;
 
     @Bean
     public IRestaurantPersistencePort restaurantPersistencePort() {
-        return new RestaurantJpaAdapter(objectRepository, objectEntityMapper);
+        return new RestaurantJpaAdapter(restaurantRepository, restaurantEntityMapper);
     }
 
     @Bean
@@ -29,7 +29,7 @@ public class BeanConfiguration {
     }
 
     @Bean
-    public IRestaurantServicePort objectServicePort() {
+    public IRestaurantServicePort restaurantServicePort() {
         return new RestaurantUseCase(restaurantPersistencePort(), userServicePort());
     }
 }
