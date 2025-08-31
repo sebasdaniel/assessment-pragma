@@ -13,7 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "objectTable")
+@Table(name = "restaurant")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

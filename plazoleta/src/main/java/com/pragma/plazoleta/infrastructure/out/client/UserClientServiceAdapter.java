@@ -6,6 +6,6 @@ public class UserClientServiceAdapter implements IUserServicePort {
     @Override
     public String getUserRole(Long userId) {
         //TODO: implement method
-        return null;
+        return "propietario";
     }
 }
