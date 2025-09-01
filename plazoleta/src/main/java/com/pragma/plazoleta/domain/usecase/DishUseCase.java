@@ -11,8 +11,8 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class DishUseCase implements IDishServicePort {
 
-    private final IRestaurantServicePort restaurantServicePort;
     private final IDishPersistencePort dishPersistencePort;
+    private final IRestaurantServicePort restaurantServicePort;
 
     @Override
     public void saveDish(Dish dish) {

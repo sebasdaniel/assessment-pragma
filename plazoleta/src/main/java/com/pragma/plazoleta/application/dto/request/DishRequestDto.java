@@ -20,8 +20,8 @@ public class DishRequestDto {
     @NotBlank(message = "Must provide a dish description")
     private String description;
 
-    @NotBlank(message = "Must provide a dish description")
-    private String urlImagen;
+    @NotBlank(message = "Must provide a dish image url")
+    private String urlImage;
 
     @NotBlank(message = "Must provide a dish category")
     private String category;
