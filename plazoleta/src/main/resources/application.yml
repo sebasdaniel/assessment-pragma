@@ -1,5 +1,5 @@
 server:
-  port: 8081
+  port: 8082
 
 spring:
   datasource:
@@ -13,3 +13,8 @@ spring:
     show-sql: true
 appDescription: "Pragma Plazoleta"
 appVersion: "1.0.0"
+
+externalapis:
+  user:
+    getuser:
+      url: "localhost:8081/api/v1/user/"

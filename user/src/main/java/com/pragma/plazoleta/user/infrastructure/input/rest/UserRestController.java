@@ -1,6 +1,7 @@
 package com.pragma.plazoleta.user.infrastructure.input.rest;
 
 import com.pragma.plazoleta.user.application.dto.request.UserRequestDto;
+import com.pragma.plazoleta.user.application.dto.response.UserResponseDto;
 import com.pragma.plazoleta.user.application.handler.IUserHandler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -10,10 +11,7 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -31,6 +29,11 @@ public class UserRestController {
     public ResponseEntity<Void> saveUserOwner(@Valid @RequestBody UserRequestDto userRequestDto) {
         userHandler.saveUserOwner(userRequestDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserResponseDto> getUser(@PathVariable Long id) {
+        return ResponseEntity.ok(userHandler.getUser(id));
     }
 
 }

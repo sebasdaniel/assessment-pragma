@@ -21,20 +21,20 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/object")
+@RequestMapping("/api/v1/restaurant")
 @RequiredArgsConstructor
-public class ObjectRestController {
+public class RestaurantRestController {
 
-    private final IRestaurantHandler objectHandler;
+    private final IRestaurantHandler restaurantHandler;
 
-    @Operation(summary = "Add a new object")
+    @Operation(summary = "Add a new restaurant")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Object created", content = @Content),
-            @ApiResponse(responseCode = "409", description = "Object already exists", content = @Content)
+            @ApiResponse(responseCode = "201", description = "Restaurant created", content = @Content),
+            @ApiResponse(responseCode = "409", description = "Restaurant already exists", content = @Content)
     })
     @PostMapping("/")
-    public ResponseEntity<Void> saveObject(@RequestBody RestaurantRequestDto restaurantRequestDto) {
-        objectHandler.saveRestaurant(restaurantRequestDto);
+    public ResponseEntity<Void> saveRestaurant(@RequestBody RestaurantRequestDto restaurantRequestDto) {
+        restaurantHandler.saveRestaurant(restaurantRequestDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -47,7 +47,7 @@ public class ObjectRestController {
     })
     @GetMapping("/")
     public ResponseEntity<List<RestaurantResponseDto>> getAllObjects() {
-        return ResponseEntity.ok(objectHandler.getAllObjects());
+        return ResponseEntity.ok(restaurantHandler.getAllObjects());
     }
 
 }

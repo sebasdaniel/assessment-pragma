@@ -13,17 +13,21 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "objectTable")
+@Table(name = "restaurant")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class ObjectEntity {
+public class RestaurantEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "object_id", nullable = false)
+    @Column(name = "restaurant_id", nullable = false)
     private Long id;
 
-    @Column(length = 50)
+    private Integer nit;
     private String name;
+    private String address;
+    private String phoneNumber;
+    private String urlLogo;
+    private Long ownerId;
 }
