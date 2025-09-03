@@ -7,4 +7,6 @@ public interface IRestaurantPersistencePort {
     Restaurant saveRestaurant(Restaurant restaurant);
 
     List<Restaurant> getAllObjects();
+
+    boolean exist(Long id);
 }

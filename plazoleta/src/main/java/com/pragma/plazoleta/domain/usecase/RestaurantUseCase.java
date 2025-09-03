@@ -54,6 +54,11 @@ public class RestaurantUseCase implements IRestaurantServicePort {
     }
 
     @Override
+    public boolean exist(Long id) {
+        return restaurantPersistencePort.exist(id);
+    }
+
+    @Override
     public List<Restaurant> getAllObjects() {
         return restaurantPersistencePort.getAllObjects();
     }

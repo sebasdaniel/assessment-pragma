@@ -9,4 +9,6 @@ public interface IRestaurantServicePort {
     void saveRestaurant(Restaurant restaurant);
 
     List<Restaurant> getAllObjects();
+
+    boolean exist(Long id);
 }
