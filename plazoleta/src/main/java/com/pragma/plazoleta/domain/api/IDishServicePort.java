@@ -5,4 +5,6 @@ import com.pragma.plazoleta.domain.model.Dish;
 public interface IDishServicePort {
 
     void saveDish(Dish dish);
+
+    Dish updateDish(Dish dish);
 }
