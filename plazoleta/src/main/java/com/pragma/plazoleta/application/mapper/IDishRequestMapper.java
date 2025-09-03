@@ -2,6 +2,7 @@ package com.pragma.plazoleta.application.mapper;
 
 import com.pragma.plazoleta.application.dto.request.DishRequestDto;
 import com.pragma.plazoleta.application.dto.request.RestaurantRequestDto;
+import com.pragma.plazoleta.application.dto.request.UpdateDishRequestDto;
 import com.pragma.plazoleta.domain.model.Dish;
 import com.pragma.plazoleta.domain.model.Restaurant;
 import org.mapstruct.Mapper;
@@ -12,4 +13,5 @@ import org.mapstruct.ReportingPolicy;
         unmappedSourcePolicy = ReportingPolicy.IGNORE)
 public interface IDishRequestMapper {
     Dish toDish(DishRequestDto dishRequestDto);
+    Dish toDish(UpdateDishRequestDto updateDishRequestDto);
 }
