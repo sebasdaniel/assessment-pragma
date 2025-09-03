@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -74,6 +76,37 @@ class DishUseCaseTest {
         verify(restaurantServicePortMock).exist(anyLong());
         verify(dishPersistencePortMock).saveDish(any());
         assertTrue(defaulDish.isActive());
+    }
+
+    @Test
+    void updateDish_ShouldThrowRequiredDataException_WhenRequiredDataIsNotPresent() {
+        // Arrange
+        defaulDish.setDescription(null);
+
+        // Act - Assert
+        assertThrows(RequiredDataException.class, () -> dishUseCase.updateDish(defaulDish));
+        verify(dishPersistencePortMock, never()).getDish(anyLong());
+        verify(dishPersistencePortMock, never()).saveDish(any());
+    }
+
+    @Test
+    void updateDish_ShouldReturnUpdatedDish_WhenEverythingIsOk() {
+        // Arrange
+        var dishToUpdate = Dish.builder()
+                .id(1L)
+                .price(123)
+                .description("Fixed description")
+                .build();
+        when(dishPersistencePortMock.getDish(anyLong())).thenReturn(defaulDish);
+        when(dishPersistencePortMock.saveDish(any())).thenReturn(defaulDish);
+
+        // Act
+        var updatedDish = dishUseCase.updateDish(dishToUpdate);
+
+        // Assert
+        assertNotNull(updatedDish);
+        assertEquals(dishToUpdate.getPrice(), defaulDish.getPrice());
+        assertEquals(dishToUpdate.getDescription(), defaulDish.getDescription());
     }
 
 }

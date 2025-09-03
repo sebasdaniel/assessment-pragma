@@ -2,6 +2,7 @@ package com.pragma.plazoleta.infrastructure.out.jpa.adapter;
 
 import com.pragma.plazoleta.domain.model.Dish;
 import com.pragma.plazoleta.domain.spi.IDishPersistencePort;
+import com.pragma.plazoleta.infrastructure.exception.NoDataFoundException;
 import com.pragma.plazoleta.infrastructure.out.jpa.mapper.IDishEntityMapper;
 import com.pragma.plazoleta.infrastructure.out.jpa.repository.IDishRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,12 @@ public class DishJpaAdapter implements IDishPersistencePort {
     @Override
     public Dish saveDish(Dish dish) {
         var dishEntity = dishRepository.save(dishEntityMapper.toEntity(dish));
+        return dishEntityMapper.toDishModel(dishEntity);
+    }
+
+    @Override
+    public Dish getDish(Long id) {
+        var dishEntity = dishRepository.findById(id).orElseThrow(NoDataFoundException::new);
         return dishEntityMapper.toDishModel(dishEntity);
     }
 }

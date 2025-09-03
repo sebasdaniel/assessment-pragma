@@ -6,9 +6,9 @@ import com.pragma.plazoleta.domain.exception.ObjectNotFoundException;
 import com.pragma.plazoleta.domain.exception.RequiredDataException;
 import com.pragma.plazoleta.domain.model.Dish;
 import com.pragma.plazoleta.domain.spi.IDishPersistencePort;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class DishUseCase implements IDishServicePort {
 
     private final IDishPersistencePort dishPersistencePort;
@@ -27,6 +27,20 @@ public class DishUseCase implements IDishServicePort {
         dish.setActive(true);
 
         dishPersistencePort.saveDish(dish);
+    }
+
+    @Override
+    public Dish updateDish(Dish dish) {
+
+        if (dish.getId() == null || dish.getPrice() == null || dish.getDescription() == null) {
+            throw new RequiredDataException("Required data for update dish is not present");
+        }
+
+        var savedDish = dishPersistencePort.getDish(dish.getId());
+        savedDish.setPrice(dish.getPrice());
+        savedDish.setDescription(dish.getDescription());
+
+        return dishPersistencePort.saveDish(savedDish);
     }
 
     private boolean haveRequiredData(Dish dish) {
