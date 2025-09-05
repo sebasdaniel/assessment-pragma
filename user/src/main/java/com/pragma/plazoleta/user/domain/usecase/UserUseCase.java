@@ -12,6 +12,10 @@ public class UserUseCase implements IUserServicePort {
 
     private static final Pattern PHONE_PATTERN = Pattern.compile("^\\+?\\d{1,12}$");
     private static final String OWNER_ROLE = "propietario";
+    private static final String REQUIRED_FIELD_EXCEPTION = "One or more required fields are missing";
+    private static final String EMAIL_FORMAT_EXCEPTION = "Invalid email format";
+    private static final String PHONE_NUMBER_FORMAT_EXCEPTION = "Invalid phone number format";
+    private static final String USER_AGE_EXCEPTION = "User age must be 18 or more";
 
     private final IUserPersistencePort userPersistencePort;
     private final IPasswordEncoderPort passwordEncoderPort;
@@ -28,7 +32,7 @@ public class UserUseCase implements IUserServicePort {
     public void saveOwner(User user) {
         validateOwnerUser(user);
 
-        var encodedPassword = passwordEncoderPort.encode(user.getPassword());
+        String encodedPassword = passwordEncoderPort.encode(user.getPassword());
 
         user.setRole(OWNER_ROLE);
         user.setPassword(encodedPassword);
@@ -43,19 +47,19 @@ public class UserUseCase implements IUserServicePort {
 
     private void validateOwnerUser(User user) {
         if (!haveOwnerRequiredData(user)) {
-            throw new MissingDataException("One or more required fields are missing");
+            throw new MissingDataException(REQUIRED_FIELD_EXCEPTION);
         }
 
         if (!isValidEmail(user.getEmail())) {
-            throw new InvalidFormatException("Invalid email format");
+            throw new InvalidFormatException(EMAIL_FORMAT_EXCEPTION);
         }
 
         if (!isValidPhoneNumber(user.getPhoneNumber())) {
-            throw new InvalidFormatException("Invalid phone number format");
+            throw new InvalidFormatException(PHONE_NUMBER_FORMAT_EXCEPTION);
         }
 
         if (!isLegalAge(user.getAge())) {
-            throw new InvalidFormatException("User age must be 18 or more");
+            throw new InvalidFormatException(USER_AGE_EXCEPTION);
         }
     }
 

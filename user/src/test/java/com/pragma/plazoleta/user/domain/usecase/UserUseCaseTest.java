@@ -70,7 +70,7 @@ class UserUseCaseTest {
     @Test
     void saveOwner_ShouldThrowException_WhenUserDoesNotHaveLegalAge() {
         // Arrange
-        var notLegalAge = LocalDate.now().minusYears(10);
+        LocalDate notLegalAge = LocalDate.now().minusYears(10);
         defaultUser.setBirthdate(notLegalAge);
 
         // Act - Assert
@@ -80,7 +80,7 @@ class UserUseCaseTest {
     @Test
     void saveOwner_ShouldSaveUser_WhenEverythingIsOk() {
         // Arrange
-        var encodedPassword = "3nc0d3dp4ssw0rd";
+        String encodedPassword = "3nc0d3dp4ssw0rd";
 
         when(bcryptEncoderPortMock.encode(anyString())).thenReturn(encodedPassword);
 

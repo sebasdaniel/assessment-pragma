@@ -22,7 +22,7 @@ public class UserJpaAdapter implements IUserPersistencePort {
 
     @Override
     public User getUser(Long id) {
-        var userEntity = userRepository.findById(id).orElseThrow(NoDataFoundException::new);
+        UserEntity userEntity = userRepository.findById(id).orElseThrow(NoDataFoundException::new);
         return userEntityMapper.toModel(userEntity);
     }
 }
