@@ -15,6 +15,11 @@ public class RestaurantUseCase implements IRestaurantServicePort {
 
     private static final Pattern PHONE_PATTERN = Pattern.compile("^\\+?\\d{1,12}$");
     private static final String OWNER_ROLE = "propietario";
+    private static final String REQUIRED_DATA_EXCEPTION = "Missing one or more required data";
+    private static final String WRONG_PHONE_NUMBER_EXCEPTION = "Phone number is not valid";
+    private static final String ONLY_NUMBER_NAME_EXCEPTION = "Name could not be only numbers";
+    private static final String OWNER_NOT_FOUND_EXCEPTION = "The owner does not exist";
+    private static final String WRONG_ROLE_EXCEPTION = "The user does not have the right role";
 
     private final IRestaurantPersistencePort restaurantPersistencePort;
     private final IUserServicePort userServicePort;
@@ -30,24 +35,24 @@ public class RestaurantUseCase implements IRestaurantServicePort {
     @Override
     public void saveRestaurant(Restaurant restaurant) {
         if (!haveRestaurantValidData(restaurant)) {
-            throw new RequiredDataException("One or more required data not present");
+            throw new RequiredDataException(REQUIRED_DATA_EXCEPTION);
         }
 
         if (!isValidPhoneNumber(restaurant.getPhoneNumber())) {
-            throw new DataFormatException("Phone number is not valid");
+            throw new DataFormatException(WRONG_PHONE_NUMBER_EXCEPTION);
         }
 
         if (!isValidRestaurantName(restaurant.getName())) {
-            throw new DataFormatException("Name could not be only numbers");
+            throw new DataFormatException(ONLY_NUMBER_NAME_EXCEPTION);
         }
 
-        var userRole = userServicePort.getUserRole(restaurant.getOwnerId());
+        String userRole = userServicePort.getUserRole(restaurant.getOwnerId());
         if (userRole == null) {
-            throw new DomainException("The owner does not exist");
+            throw new DomainException(OWNER_NOT_FOUND_EXCEPTION);
         }
 
         if (!OWNER_ROLE.equalsIgnoreCase(userRole)) {
-            throw new DomainException("The user does not have the right role");
+            throw new DomainException(WRONG_ROLE_EXCEPTION);
         }
 
         restaurantPersistencePort.saveRestaurant(restaurant);

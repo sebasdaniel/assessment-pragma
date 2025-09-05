@@ -52,7 +52,7 @@ class RestaurantUseCaseTest {
         // Act -Assert
         assertThrows(RequiredDataException.class, () -> restaurantUseCase.saveRestaurant(defaultRestaurant));
         verify(userServicePortMock, never()).getUserRole(anyLong());
-        verify(restaurantPersistentPortMock, never()).saveRestaurant(any());
+        verify(restaurantPersistentPortMock, never()).saveRestaurant(any(Restaurant.class));
     }
 
     @Test
@@ -63,7 +63,7 @@ class RestaurantUseCaseTest {
         // Act -Assert
         assertThrows(DataFormatException.class, () -> restaurantUseCase.saveRestaurant(defaultRestaurant));
         verify(userServicePortMock, never()).getUserRole(anyLong());
-        verify(restaurantPersistentPortMock, never()).saveRestaurant(any());
+        verify(restaurantPersistentPortMock, never()).saveRestaurant(any(Restaurant.class));
     }
 
     @Test
@@ -74,7 +74,7 @@ class RestaurantUseCaseTest {
         // Act -Assert
         assertThrows(DataFormatException.class, () -> restaurantUseCase.saveRestaurant(defaultRestaurant));
         verify(userServicePortMock, never()).getUserRole(anyLong());
-        verify(restaurantPersistentPortMock, never()).saveRestaurant(any());
+        verify(restaurantPersistentPortMock, never()).saveRestaurant(any(Restaurant.class));
     }
 
     @Test
@@ -85,7 +85,7 @@ class RestaurantUseCaseTest {
         // Act -Assert
         assertThrows(DomainException.class, () -> restaurantUseCase.saveRestaurant(defaultRestaurant));
         verify(userServicePortMock).getUserRole(defaultRestaurant.getOwnerId());
-        verify(restaurantPersistentPortMock, never()).saveRestaurant(any());
+        verify(restaurantPersistentPortMock, never()).saveRestaurant(any(Restaurant.class));
     }
 
     @Test
@@ -96,7 +96,7 @@ class RestaurantUseCaseTest {
         // Act -Assert
         assertThrows(DomainException.class, () -> restaurantUseCase.saveRestaurant(defaultRestaurant));
         verify(userServicePortMock).getUserRole(defaultRestaurant.getOwnerId());
-        verify(restaurantPersistentPortMock, never()).saveRestaurant(any());
+        verify(restaurantPersistentPortMock, never()).saveRestaurant(any(Restaurant.class));
     }
 
     @Test
