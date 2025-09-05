@@ -86,7 +86,7 @@ class DishUseCaseTest {
         // Act - Assert
         assertThrows(RequiredDataException.class, () -> dishUseCase.updateDish(defaulDish));
         verify(dishPersistencePortMock, never()).getDish(anyLong());
-        verify(dishPersistencePortMock, never()).saveDish(any());
+        verify(dishPersistencePortMock, never()).saveDish(any(Dish.class));
     }
 
     @Test
@@ -98,7 +98,7 @@ class DishUseCaseTest {
                 .description("Fixed description")
                 .build();
         when(dishPersistencePortMock.getDish(anyLong())).thenReturn(defaulDish);
-        when(dishPersistencePortMock.saveDish(any())).thenReturn(defaulDish);
+        when(dishPersistencePortMock.saveDish(any(Dish.class))).thenReturn(defaulDish);
 
         // Act
         var updatedDish = dishUseCase.updateDish(dishToUpdate);
