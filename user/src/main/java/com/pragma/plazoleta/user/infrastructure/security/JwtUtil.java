@@ -4,14 +4,13 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
-import io.jsonwebtoken.lang.Strings;
 import io.jsonwebtoken.security.Keys;
 import javax.annotation.PostConstruct;
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
@@ -38,10 +37,10 @@ public class JwtUtil {
 
     // Generate JWT token
     public String generateToken(UserDetails userDetails) {
-        String userRole =  getUserRole(userDetails);
+        List<String> authorities =  getUserAuthorities(userDetails);
 
         return Jwts.builder()
-                .claim("role", userRole)
+                .claim("authorities", authorities)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
@@ -78,10 +77,12 @@ public class JwtUtil {
     }
 
     // Get the user role
-    private String getUserRole(UserDetails userDetails) {
+    private List<String> getUserAuthorities(UserDetails userDetails) {
         return userDetails.getAuthorities().stream()
-                .filter(auth -> auth.getAuthority().startsWith("ROLE_"))
-                .map(auth -> Strings.replace(auth.getAuthority(), "ROLE_", ""))
-                .findFirst().orElseThrow();
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
+                //.filter(auth -> auth.getAuthority().startsWith("ROLE_"))
+                //.map(auth -> Strings.replace(auth.getAuthority(), "ROLE_", ""))
+                //.findFirst().orElseThrow();
     }
 }
