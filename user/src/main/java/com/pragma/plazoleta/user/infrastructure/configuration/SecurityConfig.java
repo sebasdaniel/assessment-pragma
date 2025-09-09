@@ -1,5 +1,6 @@
 package com.pragma.plazoleta.user.infrastructure.configuration;
 
+import com.pragma.plazoleta.user.domain.model.UserRole;
 import com.pragma.plazoleta.user.infrastructure.security.AuthTokenFilter;
 import com.pragma.plazoleta.user.infrastructure.security.CustomUserDetailsService;
 import com.pragma.plazoleta.user.infrastructure.security.JwtUtil;
@@ -45,6 +46,7 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         .antMatchers("/api/v1/auth/**").permitAll()
+                        .antMatchers("/api/v1/user/owner").hasRole(UserRole.ADMIN_ROLE)
                         .anyRequest().authenticated()
                 );
 

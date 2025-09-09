@@ -3,7 +3,10 @@ package com.pragma.plazoleta.user.infrastructure.security;
 import com.pragma.plazoleta.user.infrastructure.out.jpa.entity.UserEntity;
 import com.pragma.plazoleta.user.infrastructure.out.jpa.repository.IUserRepository;
 import java.util.Collections;
+import java.util.List;
+
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -21,10 +24,12 @@ public class CustomUserDetailsService implements UserDetailsService {
         UserEntity userEntity = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found with email: " + email));
 
+        SimpleGrantedAuthority authorityRole = new SimpleGrantedAuthority("ROLE_" + userEntity.getRole());
+
         return new User(
                 userEntity.getEmail(),
                 userEntity.getPassword(),
-                Collections.emptyList()
+                List.of(authorityRole)
         );
     }
 }
