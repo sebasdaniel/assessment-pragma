@@ -4,12 +4,18 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.lang.Strings;
 import io.jsonwebtoken.security.Keys;
 import javax.annotation.PostConstruct;
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -31,9 +37,12 @@ public class JwtUtil {
     }
 
     // Generate JWT token
-    public String generateToken(String username) {
+    public String generateToken(UserDetails userDetails) {
+        String userRole =  getUserRole(userDetails);
+
         return Jwts.builder()
-                .setSubject(username)
+                .claim("role", userRole)
+                .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(key)
@@ -66,5 +75,13 @@ public class JwtUtil {
             System.out.println("JWT claims string is empty: " + e.getMessage());
         }
         return false;
+    }
+
+    // Get the user role
+    private String getUserRole(UserDetails userDetails) {
+        return userDetails.getAuthorities().stream()
+                .filter(auth -> auth.getAuthority().startsWith("ROLE_"))
+                .map(auth -> Strings.replace(auth.getAuthority(), "ROLE_", ""))
+                .findFirst().orElseThrow();
     }
 }
