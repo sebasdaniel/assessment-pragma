@@ -6,7 +6,7 @@ import org.springframework.web.client.RestTemplate;
 
 public class UserClientServiceAdapter implements IUserServicePort {
 
-    @Value("${externalapis.user.getuser.url}")
+    @Value("${external-apis.user.get-user.url}")
     private String getUserUrl;
 
     @Override
