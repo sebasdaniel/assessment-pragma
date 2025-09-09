@@ -23,11 +23,6 @@ public class SecurityConfig {
     final JwtUtil jwtUtil;
     final AuthTokenFilter authenticationJwtTokenFilter;
 
-//    @Bean
-//    public AuthTokenFilter authenticationJwtTokenFilter() {
-//        return new AuthTokenFilter(jwtUtil);
-//    }
-
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration authenticationConfiguration
@@ -44,7 +39,6 @@ public class SecurityConfig {
                         sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        //.antMatchers("/api/v1/auth/**").permitAll()
                         .antMatchers("/api/v1/restaurant").hasRole(Role.ADMIN)
                         .antMatchers("/api/v1/dish").hasRole(Role.OWNER)
                         .anyRequest().authenticated()

@@ -8,7 +8,6 @@ import com.pragma.plazoleta.domain.model.Restaurant;
 import com.pragma.plazoleta.domain.model.Role;
 import com.pragma.plazoleta.domain.spi.IRestaurantPersistencePort;
 import com.pragma.plazoleta.domain.spi.IUserServicePort;
-
 import java.util.List;
 import java.util.regex.Pattern;
 
