@@ -2,7 +2,6 @@ package com.pragma.plazoleta.infrastructure.configuration;
 
 import com.pragma.plazoleta.domain.model.Role;
 import com.pragma.plazoleta.infrastructure.security.AuthTokenFilter;
-import com.pragma.plazoleta.infrastructure.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,14 +19,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    final JwtUtil jwtUtil;
     final AuthTokenFilter authenticationJwtTokenFilter;
 
     @Bean
-    public AuthenticationManager authenticationManager(
-            AuthenticationConfiguration authenticationConfiguration
-    ) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+        return authConfig.getAuthenticationManager();
     }
 
     @Bean
@@ -44,7 +40,6 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 );
 
-        // Add the JWT Token filter before the UsernamePasswordAuthenticationFilter
         http.addFilterBefore(authenticationJwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

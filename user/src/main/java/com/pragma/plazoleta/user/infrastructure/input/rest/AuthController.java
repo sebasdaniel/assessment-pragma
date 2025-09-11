@@ -1,6 +1,7 @@
 package com.pragma.plazoleta.user.infrastructure.input.rest;
 
 import com.pragma.plazoleta.user.application.dto.request.AuthRequestDto;
+import com.pragma.plazoleta.user.infrastructure.security.CustomUserDetails;
 import com.pragma.plazoleta.user.infrastructure.security.JwtUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -33,7 +34,6 @@ public class AuthController {
     })
     @PostMapping("/sign-in")
     public ResponseEntity<String> authenticateUser(@RequestBody @Valid AuthRequestDto requestDto) {
-
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         requestDto.getEmail(),
@@ -41,7 +41,7 @@ public class AuthController {
                 )
         );
 
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         String token = jwtUtils.generateToken(userDetails);
 
         return ResponseEntity.ok(token);

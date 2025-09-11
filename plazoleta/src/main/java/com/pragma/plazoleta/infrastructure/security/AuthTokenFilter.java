@@ -10,6 +10,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,6 +24,13 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 public class AuthTokenFilter extends OncePerRequestFilter {
+
+    private static final Logger log = LoggerFactory.getLogger(AuthTokenFilter.class);
+
+    private static final String AUTH_HEADER = "Authorization";
+    private static final String BEARER_PREFIX = "Bearer ";
+    private static final int BEARER_PREFIX_LENGTH = 7;
+    private static final String AUTHORITIES_CLAIM = "authorities";
 
     private final JwtUtil jwtUtils;
 
@@ -49,29 +58,30 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception e) {
-            System.out.println("Cannot set user authentication: " + e);
+            log.error("Cannot set user authentication: ", e);
         }
 
         filterChain.doFilter(request, response);
     }
 
     private String parseJwt(HttpServletRequest request) {
-        String headerAuth = request.getHeader("Authorization");
+        String headerAuth = request.getHeader(AUTH_HEADER);
 
-        if (headerAuth != null && headerAuth.startsWith("Bearer ")) {
-            return headerAuth.substring(7);
+        if (headerAuth != null && headerAuth.startsWith(BEARER_PREFIX)) {
+            return headerAuth.substring(BEARER_PREFIX_LENGTH);
         }
 
         return null;
     }
 
     private List<SimpleGrantedAuthority> getAuthoritiesFromToken(Claims claims) {
-        if (isNull(claims.get("authorities"))) {
-            System.out.println("Authorities not found");
+        if (isNull(claims.get(AUTHORITIES_CLAIM))) {
+            log.error("Authorities not found");
             return Collections.emptyList();
         }
 
-        List<String> authorityList = (List) claims.get("authorities");
+        @SuppressWarnings("unchecked")
+        List<String> authorityList = (List<String>) claims.get(AUTHORITIES_CLAIM);
 
         return authorityList.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
     }

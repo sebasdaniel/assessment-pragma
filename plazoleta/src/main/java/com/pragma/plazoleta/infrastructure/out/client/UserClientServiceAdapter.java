@@ -13,7 +13,6 @@ public class UserClientServiceAdapter implements IUserServicePort {
     public String getUserRole(Long userId) {
         RestTemplate restTemplate = new RestTemplate();
 
-        //TODO: manage exception with custom exception
         GetUserResponse user = restTemplate.getForObject(getUserUrl + "/" + userId, GetUserResponse.class);
 
         return user != null ? user.getRole() : "";
