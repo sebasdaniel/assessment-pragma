@@ -24,6 +24,7 @@ public class JwtUtil {
     private static final Logger log = LoggerFactory.getLogger(JwtUtil.class);
 
     private static final String AUTHORITIES_CLAIM = "authorities";
+    private static final String USER_ID_CLAIM = "userId";
 
     @Value("${jwt.secret}")
     private String jwtSecret;
@@ -44,7 +45,7 @@ public class JwtUtil {
 
         return Jwts.builder()
                 .claim(AUTHORITIES_CLAIM, authorities)
-                .claim("userId", userDetails.getUserId())
+                .claim(USER_ID_CLAIM, userDetails.getUserId())
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
