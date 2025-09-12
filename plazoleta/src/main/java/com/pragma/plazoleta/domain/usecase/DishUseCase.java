@@ -24,11 +24,11 @@ public class DishUseCase implements IDishServicePort {
 
     @Override
     public void saveDish(Dish dish) {
-        if (!haveRequiredData(dish)) {
+        if (!haveAllData(dish)) {
             throw new RequiredDataException(REQUIRED_DATA_EXCEPTION);
         }
 
-        if (!isValidDishPrice(dish.getPrice())) {
+        if (!haveValidDishPrice(dish.getPrice())) {
             throw new DomainException(PRICE_EXCEPTION);
         }
 
@@ -47,12 +47,16 @@ public class DishUseCase implements IDishServicePort {
 
     @Override
     public Dish updateDish(Dish dish) {
-        if (isNull(dish.getId()) || isNull(dish.getPrice()) || isNull(dish.getDescription())) {
+        if (!haveAllDataForUpdate(dish)) {
             throw new RequiredDataException(REQUIRED_DATA_EXCEPTION);
         }
 
-        if (!isValidDishPrice(dish.getPrice())) {
+        if (!haveValidDishPrice(dish.getPrice())) {
             throw new DomainException(PRICE_EXCEPTION);
+        }
+
+        if (!restaurantServicePort.matchOwner(dish.getRestaurantId(), dish.getCreatorId())) {
+            throw new DomainException(RESTAURANT_AND_OWNER_NOT_MATCH_EXCEPTION);
         }
 
         Dish savedDish = dishPersistencePort.getDish(dish.getId());
@@ -62,12 +66,18 @@ public class DishUseCase implements IDishServicePort {
         return dishPersistencePort.saveDish(savedDish);
     }
 
-    private boolean haveRequiredData(Dish dish) {
-        return dish.getName() != null && dish.getPrice() != null && dish.getDescription() != null &&
-                dish.getUrlImage() != null && dish.getCategory() != null && dish.getRestaurantId() != null;
+    private boolean haveAllData(Dish dish) {
+        return !isNull(dish.getName()) && !isNull(dish.getPrice()) && !isNull(dish.getDescription()) &&
+                !isNull(dish.getUrlImage()) && !isNull(dish.getCategory()) &&
+                !isNull(dish.getRestaurantId()) && !isNull(dish.getCreatorId());
     }
 
-    private boolean isValidDishPrice(Integer price) {
+    private boolean haveAllDataForUpdate(Dish dish) {
+        return !isNull(dish.getId()) && !isNull(dish.getPrice()) &&
+                !isNull(dish.getDescription()) && !isNull(dish.getCreatorId());
+    }
+
+    private boolean haveValidDishPrice(Integer price) {
         return !isNull(price) && price > 0;
     }
 }
