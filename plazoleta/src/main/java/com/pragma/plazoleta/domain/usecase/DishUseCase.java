@@ -17,6 +17,7 @@ public class DishUseCase implements IDishServicePort {
     private static final String PRICE_EXCEPTION = "Price must be a positive number";
     private static final String REQUIRED_DATA_EXCEPTION = "One or more required data is not present";
     private static final String RESTAURANT_NOT_FOUND_EXCEPTION = "The restaurant related with the dish does not exist";
+    private static final String RESTAURANT_AND_OWNER_NOT_MATCH_EXCEPTION = "The restaurant doesn't belong to the creator of the dish";
 
     private final IDishPersistencePort dishPersistencePort;
     private final IRestaurantServicePort restaurantServicePort;
@@ -33,6 +34,10 @@ public class DishUseCase implements IDishServicePort {
 
         if (!restaurantServicePort.exist(dish.getRestaurantId())) {
             throw new ObjectNotFoundException(RESTAURANT_NOT_FOUND_EXCEPTION);
+        }
+
+        if (!restaurantServicePort.matchOwner(dish.getRestaurantId(), dish.getCreatorId())) {
+            throw new DomainException(RESTAURANT_AND_OWNER_NOT_MATCH_EXCEPTION);
         }
 
         dish.setActive(true);

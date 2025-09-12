@@ -9,4 +9,6 @@ public interface IRestaurantPersistencePort {
     List<Restaurant> getAllObjects();
 
     boolean exist(Long id);
+
+    boolean matchRestaurantOwner(Long restaurantId, Long ownerId);
 }

@@ -16,4 +16,5 @@ public class Dish {
     private String category;
     private Long restaurantId;
     private boolean active;
+    private Long creatorId;
 }
