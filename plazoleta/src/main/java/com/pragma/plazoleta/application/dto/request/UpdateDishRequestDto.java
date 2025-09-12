@@ -19,4 +19,6 @@ public class UpdateDishRequestDto {
 
     @NotBlank(message = "Must provide a dish description")
     private String description;
+
+    private Long creatorId;
 }

@@ -31,6 +31,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     private static final String BEARER_PREFIX = "Bearer ";
     private static final int BEARER_PREFIX_LENGTH = 7;
     private static final String AUTHORITIES_CLAIM = "authorities";
+    private static final String USER_ID_CLAIM = "userId";
 
     private final JwtUtil jwtUtils;
 
@@ -46,12 +47,20 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 Claims claims = jwtUtils.getClaims(jwt);
 
                 String username = claims.getSubject();
+                Long userId = getUserIdFromToken(claims);
+
+                CustomUserDetails userDetails = new CustomUserDetails(
+                        username,
+                        null,
+                        getAuthoritiesFromToken(claims),
+                        userId
+                );
 
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(
-                                username,
+                                userDetails,
                                 null,
-                                getAuthoritiesFromToken(claims)
+                                userDetails.getAuthorities()
                         );
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
@@ -84,5 +93,14 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         List<String> authorityList = (List<String>) claims.get(AUTHORITIES_CLAIM);
 
         return authorityList.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+    }
+
+    private Long getUserIdFromToken(Claims claims) {
+        if (isNull(claims.get(USER_ID_CLAIM))) {
+            log.error("User ID not found");
+            return null;
+        }
+
+        return ((Number) claims.get(USER_ID_CLAIM)).longValue();
     }
 }
