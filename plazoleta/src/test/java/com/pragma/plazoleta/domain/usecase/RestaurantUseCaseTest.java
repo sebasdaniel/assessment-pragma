@@ -4,6 +4,7 @@ import com.pragma.plazoleta.domain.exception.DataFormatException;
 import com.pragma.plazoleta.domain.exception.DomainException;
 import com.pragma.plazoleta.domain.exception.RequiredDataException;
 import com.pragma.plazoleta.domain.model.Restaurant;
+import com.pragma.plazoleta.domain.model.Role;
 import com.pragma.plazoleta.domain.spi.IRestaurantPersistencePort;
 import com.pragma.plazoleta.domain.spi.IUserServicePort;
 import org.junit.jupiter.api.BeforeEach;
@@ -102,7 +103,7 @@ class RestaurantUseCaseTest {
     @Test
     void saveRestaurant_ShouldSaveRestaurant_WhenEverythingIsOk() {
         // Arrange
-        when(userServicePortMock.getUserRole(defaultRestaurant.getOwnerId())).thenReturn("propietario");
+        when(userServicePortMock.getUserRole(defaultRestaurant.getOwnerId())).thenReturn(Role.OWNER);
 
         // Act -Assert
         assertDoesNotThrow(() -> restaurantUseCase.saveRestaurant(defaultRestaurant));

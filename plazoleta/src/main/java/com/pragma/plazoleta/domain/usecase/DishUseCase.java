@@ -55,11 +55,12 @@ public class DishUseCase implements IDishServicePort {
             throw new DomainException(PRICE_EXCEPTION);
         }
 
-        if (!restaurantServicePort.matchOwner(dish.getRestaurantId(), dish.getCreatorId())) {
+        Dish savedDish = dishPersistencePort.getDish(dish.getId());
+
+        if (!restaurantServicePort.matchOwner(savedDish.getRestaurantId(), dish.getCreatorId())) {
             throw new DomainException(RESTAURANT_AND_OWNER_NOT_MATCH_EXCEPTION);
         }
 
-        Dish savedDish = dishPersistencePort.getDish(dish.getId());
         savedDish.setPrice(dish.getPrice());
         savedDish.setDescription(dish.getDescription());
 
