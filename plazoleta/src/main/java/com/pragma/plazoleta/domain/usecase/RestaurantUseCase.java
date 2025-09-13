@@ -63,8 +63,8 @@ public class RestaurantUseCase implements IRestaurantServicePort {
     }
 
     @Override
-    public boolean matchOwner(Long restaurantId, Long creatorId) {
-        return restaurantPersistencePort.matchRestaurantOwner(restaurantId, creatorId);
+    public boolean matchOwner(Long restaurantId, Long ownerId) {
+        return restaurantPersistencePort.matchRestaurantOwner(restaurantId, ownerId);
     }
 
     @Override

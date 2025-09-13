@@ -10,7 +10,7 @@ public interface IRestaurantServicePort {
 
     boolean exist(Long id);
 
-    boolean matchOwner(Long restaurantId, Long creatorId);
+    boolean matchOwner(Long restaurantId, Long ownerId);
 
     List<Restaurant> getAllObjects();
 }
