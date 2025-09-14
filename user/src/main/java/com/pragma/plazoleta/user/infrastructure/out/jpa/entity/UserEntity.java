@@ -37,7 +37,12 @@ public class UserEntity {
     private String phoneNumber;
 
     private LocalDate birthdate;
+
+    @Column(length = 50, unique = true)
     private String email;
+
     private String password;
+
+    @Column(length = 20)
     private String role;
 }

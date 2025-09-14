@@ -11,8 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -26,6 +24,12 @@ public class UserHandler implements IUserHandler {
     public void saveUserOwner(UserRequestDto userRequestDto) {
         User user = userRequestMapper.toUser(userRequestDto);
         userServicePort.saveOwner(user);
+    }
+
+    @Override
+    public void saveUserEmployee(UserRequestDto userRequestDto) {
+        User user = userRequestMapper.toUser(userRequestDto);
+        userServicePort.saveEmployee(user);
     }
 
     @Override

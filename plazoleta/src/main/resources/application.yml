@@ -14,7 +14,11 @@ spring:
 appDescription: "Pragma Plazoleta"
 appVersion: "1.0.0"
 
-externalapis:
+# JWT Configuration
+jwt:
+  secret: ff739b6a3d0427aaa511ba0d5e991df7b92a91589bc59db823c6db6fd0a93c6c
+
+external-apis:
   user:
-    getuser:
-      url: "localhost:8081/api/v1/user/"
+    get-user:
+      url: "http://localhost:8081/api/v1/user"

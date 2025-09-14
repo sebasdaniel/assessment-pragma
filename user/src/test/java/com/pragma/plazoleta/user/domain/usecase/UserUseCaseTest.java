@@ -3,6 +3,7 @@ package com.pragma.plazoleta.user.domain.usecase;
 import com.pragma.plazoleta.user.domain.exception.InvalidFormatException;
 import com.pragma.plazoleta.user.domain.exception.MissingDataException;
 import com.pragma.plazoleta.user.domain.model.User;
+import com.pragma.plazoleta.user.domain.model.Role;
 import com.pragma.plazoleta.user.domain.spi.IPasswordEncoderPort;
 import com.pragma.plazoleta.user.domain.spi.IUserPersistencePort;
 import java.time.LocalDate;
@@ -40,10 +41,15 @@ class UserUseCaseTest {
         );
     }
 
+    /**
+     * #######################################
+     * ##    Tests for saveOwner method     ##
+     * #######################################
+     */
     @Test
     void saveOwner_ShouldThrowException_WhenRequiredDataIsNotPresent() {
         // Arrange
-        defaultUser.setPassword(null);
+        defaultUser.setBirthdate(null);
 
         // Act - Assert
         assertThrows(MissingDataException.class, () -> userUseCase.saveOwner(defaultUser));
@@ -70,7 +76,7 @@ class UserUseCaseTest {
     @Test
     void saveOwner_ShouldThrowException_WhenUserDoesNotHaveLegalAge() {
         // Arrange
-        var notLegalAge = LocalDate.now().minusYears(10);
+        LocalDate notLegalAge = LocalDate.now().minusYears(10);
         defaultUser.setBirthdate(notLegalAge);
 
         // Act - Assert
@@ -80,13 +86,60 @@ class UserUseCaseTest {
     @Test
     void saveOwner_ShouldSaveUser_WhenEverythingIsOk() {
         // Arrange
-        var encodedPassword = "3nc0d3dp4ssw0rd";
+        String encodedPassword = "3nc0d3dp4ssw0rd";
 
         when(bcryptEncoderPortMock.encode(anyString())).thenReturn(encodedPassword);
 
         // Act - Assert
         assertDoesNotThrow(() -> userUseCase.saveOwner(defaultUser));
-        assertEquals("propietario", defaultUser.getRole());
+        assertEquals(Role.OWNER, defaultUser.getRole());
+        assertEquals(encodedPassword, defaultUser.getPassword());
+
+        verify(bcryptEncoderPortMock).encode(anyString());
+    }
+
+    /**
+     * #######################################
+     * ##    Tests for saveEmployee method  ##
+     * #######################################
+     */
+    @Test
+    void saveEmployee_ShouldThrowException_WhenRequiredDataIsNotPresent() {
+        // Arrange
+        defaultUser.setPassword(null);
+
+        // Act - Assert
+        assertThrows(MissingDataException.class, () -> userUseCase.saveEmployee(defaultUser));
+    }
+
+    @Test
+    void saveEmployee_ShouldThrowException_WhenEmailIsNotValid() {
+        // Arrange
+        defaultUser.setEmail("wrongemail.com");
+
+        // Act - Assert
+        assertThrows(InvalidFormatException.class, () -> userUseCase.saveEmployee(defaultUser));
+    }
+
+    @Test
+    void saveEmployee_ShouldThrowException_WhenPhoneNumberIsNotValid() {
+        // Arrange
+        defaultUser.setPhoneNumber("+57 (301) 12345567");
+
+        // Act - Assert
+        assertThrows(InvalidFormatException.class, () -> userUseCase.saveEmployee(defaultUser));
+    }
+
+    @Test
+    void saveEmployee_ShouldSaveUser_WhenEverythingIsOk() {
+        // Arrange
+        String encodedPassword = "3nc0d3dp4ssw0rd";
+
+        when(bcryptEncoderPortMock.encode(anyString())).thenReturn(encodedPassword);
+
+        // Act - Assert
+        assertDoesNotThrow(() -> userUseCase.saveEmployee(defaultUser));
+        assertEquals(Role.EMPLOYEE, defaultUser.getRole());
         assertEquals(encodedPassword, defaultUser.getPassword());
 
         verify(bcryptEncoderPortMock).encode(anyString());

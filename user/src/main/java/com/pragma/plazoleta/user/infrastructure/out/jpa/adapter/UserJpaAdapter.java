@@ -2,6 +2,7 @@ package com.pragma.plazoleta.user.infrastructure.out.jpa.adapter;
 
 import com.pragma.plazoleta.user.domain.model.User;
 import com.pragma.plazoleta.user.domain.spi.IUserPersistencePort;
+import com.pragma.plazoleta.user.infrastructure.exception.NoDataFoundException;
 import com.pragma.plazoleta.user.infrastructure.out.jpa.entity.UserEntity;
 import com.pragma.plazoleta.user.infrastructure.out.jpa.mapper.IUserEntityMapper;
 import com.pragma.plazoleta.user.infrastructure.out.jpa.repository.IUserRepository;
@@ -21,7 +22,7 @@ public class UserJpaAdapter implements IUserPersistencePort {
 
     @Override
     public User getUser(Long id) {
-        var userEntity = userRepository.getReferenceById(id);
+        UserEntity userEntity = userRepository.findById(id).orElseThrow(NoDataFoundException::new);
         return userEntityMapper.toModel(userEntity);
     }
 }

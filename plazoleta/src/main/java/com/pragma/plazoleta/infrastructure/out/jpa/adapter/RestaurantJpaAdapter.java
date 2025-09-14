@@ -24,6 +24,16 @@ public class RestaurantJpaAdapter implements IRestaurantPersistencePort {
     }
 
     @Override
+    public boolean exist(Long id) {
+        return restaurantRepository.existsById(id);
+    }
+
+    @Override
+    public boolean matchRestaurantOwner(Long restaurantId, Long ownerId) {
+        return restaurantRepository.existsByIdAndOwnerId(restaurantId, ownerId);
+    }
+
+    @Override
     public List<Restaurant> getAllObjects() {
         List<RestaurantEntity> entityList = restaurantRepository.findAll();
         if (entityList.isEmpty()) {

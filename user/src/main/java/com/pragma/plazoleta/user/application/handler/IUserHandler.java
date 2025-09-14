@@ -6,5 +6,6 @@ import com.pragma.plazoleta.user.application.dto.response.UserResponseDto;
 public interface IUserHandler {
 
     void saveUserOwner(UserRequestDto userRequestDto);
+    void saveUserEmployee(UserRequestDto userRequestDto);
     UserResponseDto getUser(Long id);
 }

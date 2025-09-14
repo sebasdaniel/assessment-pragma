@@ -6,14 +6,13 @@ import org.springframework.web.client.RestTemplate;
 
 public class UserClientServiceAdapter implements IUserServicePort {
 
-    @Value("${externalapis.user.getuser.url}")
+    @Value("${external-apis.user.get-user.url}")
     private String getUserUrl;
 
     @Override
     public String getUserRole(Long userId) {
         RestTemplate restTemplate = new RestTemplate();
 
-        //TODO: manage exception with custom exception
         GetUserResponse user = restTemplate.getForObject(getUserUrl + "/" + userId, GetUserResponse.class);
 
         return user != null ? user.getRole() : "";

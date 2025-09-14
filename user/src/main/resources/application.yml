@@ -11,5 +11,11 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+
+# JWT Configuration
+jwt:
+  secret: ff739b6a3d0427aaa511ba0d5e991df7b92a91589bc59db823c6db6fd0a93c6c
+  expiration: 3600000
+
 appDescription: "Pragma User"
 appVersion: "1.0.0"
