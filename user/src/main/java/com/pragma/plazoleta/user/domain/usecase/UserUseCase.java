@@ -4,10 +4,12 @@ import com.pragma.plazoleta.user.domain.api.IUserServicePort;
 import com.pragma.plazoleta.user.domain.exception.InvalidFormatException;
 import com.pragma.plazoleta.user.domain.exception.MissingDataException;
 import com.pragma.plazoleta.user.domain.model.User;
-import com.pragma.plazoleta.user.domain.model.UserRole;
+import com.pragma.plazoleta.user.domain.model.Role;
 import com.pragma.plazoleta.user.domain.spi.IPasswordEncoderPort;
 import com.pragma.plazoleta.user.domain.spi.IUserPersistencePort;
 import java.util.regex.Pattern;
+
+import static java.util.Objects.isNull;
 
 public class UserUseCase implements IUserServicePort {
 
@@ -30,11 +32,23 @@ public class UserUseCase implements IUserServicePort {
 
     @Override
     public void saveOwner(User user) {
-        validateOwnerUser(user);
+        validateUser(user, Role.OWNER);
 
         String encodedPassword = passwordEncoderPort.encode(user.getPassword());
 
-        user.setRole(UserRole.OWNER_ROLE);
+        user.setRole(Role.OWNER);
+        user.setPassword(encodedPassword);
+
+        userPersistencePort.saveUser(user);
+    }
+
+    @Override
+    public void saveEmployee(User user) {
+        validateUser(user, Role.EMPLOYEE);
+
+        String encodedPassword = passwordEncoderPort.encode(user.getPassword());
+
+        user.setRole(Role.EMPLOYEE);
         user.setPassword(encodedPassword);
 
         userPersistencePort.saveUser(user);
@@ -45,9 +59,19 @@ public class UserUseCase implements IUserServicePort {
         return userPersistencePort.getUser(id);
     }
 
-    private void validateOwnerUser(User user) {
-        if (!haveOwnerRequiredData(user)) {
-            throw new MissingDataException(REQUIRED_FIELD_EXCEPTION);
+    private void validateUser(User user, String role) {
+        if (role.equals(Role.OWNER)) {
+            if (!haveOwnerRequiredData(user)) {
+                throw new MissingDataException(REQUIRED_FIELD_EXCEPTION);
+            }
+
+            if (!isLegalAge(user.getAge())) {
+                throw new InvalidFormatException(USER_AGE_EXCEPTION);
+            }
+        } else {
+            if (!haveUserRequiredData(user)) {
+                throw new MissingDataException(REQUIRED_FIELD_EXCEPTION);
+            }
         }
 
         if (!isValidEmail(user.getEmail())) {
@@ -57,16 +81,15 @@ public class UserUseCase implements IUserServicePort {
         if (!isValidPhoneNumber(user.getPhoneNumber())) {
             throw new InvalidFormatException(PHONE_NUMBER_FORMAT_EXCEPTION);
         }
-
-        if (!isLegalAge(user.getAge())) {
-            throw new InvalidFormatException(USER_AGE_EXCEPTION);
-        }
     }
 
     private boolean haveOwnerRequiredData(User user) {
-        return user.getName() != null && user.getLastName() != null && user.getIdNumber() != null
-                && user.getPhoneNumber() != null && user.getBirthdate() != null
-                && user.getEmail() != null && user.getPassword() != null;
+        return haveUserRequiredData(user) && !isNull(user.getBirthdate());
+    }
+
+    private boolean haveUserRequiredData(User user) {
+        return !isNull(user.getName()) && !isNull(user.getLastName()) && !isNull(user.getIdNumber())
+                && !isNull(user.getPhoneNumber()) && !isNull(user.getEmail()) && !isNull(user.getPassword());
     }
 
     private boolean isValidEmail(String email) {

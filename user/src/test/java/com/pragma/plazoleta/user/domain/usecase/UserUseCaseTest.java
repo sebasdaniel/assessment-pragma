@@ -3,7 +3,7 @@ package com.pragma.plazoleta.user.domain.usecase;
 import com.pragma.plazoleta.user.domain.exception.InvalidFormatException;
 import com.pragma.plazoleta.user.domain.exception.MissingDataException;
 import com.pragma.plazoleta.user.domain.model.User;
-import com.pragma.plazoleta.user.domain.model.UserRole;
+import com.pragma.plazoleta.user.domain.model.Role;
 import com.pragma.plazoleta.user.domain.spi.IPasswordEncoderPort;
 import com.pragma.plazoleta.user.domain.spi.IUserPersistencePort;
 import java.time.LocalDate;
@@ -87,7 +87,7 @@ class UserUseCaseTest {
 
         // Act - Assert
         assertDoesNotThrow(() -> userUseCase.saveOwner(defaultUser));
-        assertEquals(UserRole.OWNER_ROLE, defaultUser.getRole());
+        assertEquals(Role.OWNER, defaultUser.getRole());
         assertEquals(encodedPassword, defaultUser.getPassword());
 
         verify(bcryptEncoderPortMock).encode(anyString());

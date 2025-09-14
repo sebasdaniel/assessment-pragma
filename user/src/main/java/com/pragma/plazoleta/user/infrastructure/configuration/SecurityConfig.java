@@ -1,6 +1,6 @@
 package com.pragma.plazoleta.user.infrastructure.configuration;
 
-import com.pragma.plazoleta.user.domain.model.UserRole;
+import com.pragma.plazoleta.user.domain.model.Role;
 import com.pragma.plazoleta.user.infrastructure.security.AuthTokenFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -38,7 +38,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .antMatchers("/api/v1/auth/**").permitAll()
                         .antMatchers(HttpMethod.GET,"/api/v1/user/**").permitAll()
-                        .antMatchers("/api/v1/user/owner").hasRole(UserRole.ADMIN_ROLE)
+                        .antMatchers("/api/v1/user/owner").hasRole(Role.ADMIN)
                         .anyRequest().authenticated()
                 );
 
