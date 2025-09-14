@@ -4,10 +4,13 @@ import com.pragma.plazoleta.domain.exception.DataFormatException;
 import com.pragma.plazoleta.domain.exception.DomainException;
 import com.pragma.plazoleta.domain.exception.RequiredDataException;
 import com.pragma.plazoleta.domain.model.Restaurant;
+import com.pragma.plazoleta.domain.model.Role;
 import com.pragma.plazoleta.domain.spi.IRestaurantPersistencePort;
 import com.pragma.plazoleta.domain.spi.IUserServicePort;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -102,11 +105,33 @@ class RestaurantUseCaseTest {
     @Test
     void saveRestaurant_ShouldSaveRestaurant_WhenEverythingIsOk() {
         // Arrange
-        when(userServicePortMock.getUserRole(defaultRestaurant.getOwnerId())).thenReturn("propietario");
+        when(userServicePortMock.getUserRole(defaultRestaurant.getOwnerId())).thenReturn(Role.OWNER);
 
         // Act -Assert
         assertDoesNotThrow(() -> restaurantUseCase.saveRestaurant(defaultRestaurant));
         verify(userServicePortMock).getUserRole(defaultRestaurant.getOwnerId());
         verify(restaurantPersistentPortMock).saveRestaurant(defaultRestaurant);
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = {true, false})
+    void exist_ShouldCallExistMethodFromPersistencePort(boolean exists) {
+        // Arrange
+        when(restaurantPersistentPortMock.exist(anyLong())).thenReturn(exists);
+
+        // Act - Assert
+        assertDoesNotThrow(() -> restaurantUseCase.exist(1L));
+        verify(restaurantPersistentPortMock).exist(anyLong());
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = {true, false})
+    void matchOwner_ShouldCallMatchRestaurantOwnerMethodFromPersistencePort(boolean match) {
+        // Arrange
+        when(restaurantPersistentPortMock.matchRestaurantOwner(anyLong(), anyLong())).thenReturn(match);
+
+        // Act - Assert
+        assertDoesNotThrow(() -> restaurantUseCase.matchOwner(1L, 1L));
+        verify(restaurantPersistentPortMock).matchRestaurantOwner(anyLong(), anyLong());
     }
 }

@@ -4,6 +4,7 @@ import com.pragma.plazoleta.user.domain.api.IUserServicePort;
 import com.pragma.plazoleta.user.domain.exception.InvalidFormatException;
 import com.pragma.plazoleta.user.domain.exception.MissingDataException;
 import com.pragma.plazoleta.user.domain.model.User;
+import com.pragma.plazoleta.user.domain.model.UserRole;
 import com.pragma.plazoleta.user.domain.spi.IPasswordEncoderPort;
 import com.pragma.plazoleta.user.domain.spi.IUserPersistencePort;
 import java.util.regex.Pattern;
@@ -11,7 +12,6 @@ import java.util.regex.Pattern;
 public class UserUseCase implements IUserServicePort {
 
     private static final Pattern PHONE_PATTERN = Pattern.compile("^\\+?\\d{1,12}$");
-    private static final String OWNER_ROLE = "propietario";
     private static final String REQUIRED_FIELD_EXCEPTION = "One or more required fields are missing";
     private static final String EMAIL_FORMAT_EXCEPTION = "Invalid email format";
     private static final String PHONE_NUMBER_FORMAT_EXCEPTION = "Invalid phone number format";
@@ -34,7 +34,7 @@ public class UserUseCase implements IUserServicePort {
 
         String encodedPassword = passwordEncoderPort.encode(user.getPassword());
 
-        user.setRole(OWNER_ROLE);
+        user.setRole(UserRole.OWNER_ROLE);
         user.setPassword(encodedPassword);
 
         userPersistencePort.saveUser(user);

@@ -5,16 +5,15 @@ import com.pragma.plazoleta.domain.exception.DataFormatException;
 import com.pragma.plazoleta.domain.exception.DomainException;
 import com.pragma.plazoleta.domain.exception.RequiredDataException;
 import com.pragma.plazoleta.domain.model.Restaurant;
+import com.pragma.plazoleta.domain.model.Role;
 import com.pragma.plazoleta.domain.spi.IRestaurantPersistencePort;
 import com.pragma.plazoleta.domain.spi.IUserServicePort;
-
 import java.util.List;
 import java.util.regex.Pattern;
 
 public class RestaurantUseCase implements IRestaurantServicePort {
 
     private static final Pattern PHONE_PATTERN = Pattern.compile("^\\+?\\d{1,12}$");
-    private static final String OWNER_ROLE = "propietario";
     private static final String REQUIRED_DATA_EXCEPTION = "Missing one or more required data";
     private static final String WRONG_PHONE_NUMBER_EXCEPTION = "Phone number is not valid";
     private static final String ONLY_NUMBER_NAME_EXCEPTION = "Name could not be only numbers";
@@ -51,7 +50,7 @@ public class RestaurantUseCase implements IRestaurantServicePort {
             throw new DomainException(OWNER_NOT_FOUND_EXCEPTION);
         }
 
-        if (!OWNER_ROLE.equalsIgnoreCase(userRole)) {
+        if (!Role.OWNER.equalsIgnoreCase(userRole)) {
             throw new DomainException(WRONG_ROLE_EXCEPTION);
         }
 
@@ -61,6 +60,11 @@ public class RestaurantUseCase implements IRestaurantServicePort {
     @Override
     public boolean exist(Long id) {
         return restaurantPersistencePort.exist(id);
+    }
+
+    @Override
+    public boolean matchOwner(Long restaurantId, Long ownerId) {
+        return restaurantPersistencePort.matchRestaurantOwner(restaurantId, ownerId);
     }
 
     @Override
