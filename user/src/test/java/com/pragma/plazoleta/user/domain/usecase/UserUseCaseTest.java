@@ -41,10 +41,15 @@ class UserUseCaseTest {
         );
     }
 
+    /**
+     * #######################################
+     * ##    Tests for saveOwner method     ##
+     * #######################################
+     */
     @Test
     void saveOwner_ShouldThrowException_WhenRequiredDataIsNotPresent() {
         // Arrange
-        defaultUser.setPassword(null);
+        defaultUser.setBirthdate(null);
 
         // Act - Assert
         assertThrows(MissingDataException.class, () -> userUseCase.saveOwner(defaultUser));
@@ -88,6 +93,53 @@ class UserUseCaseTest {
         // Act - Assert
         assertDoesNotThrow(() -> userUseCase.saveOwner(defaultUser));
         assertEquals(Role.OWNER, defaultUser.getRole());
+        assertEquals(encodedPassword, defaultUser.getPassword());
+
+        verify(bcryptEncoderPortMock).encode(anyString());
+    }
+
+    /**
+     * #######################################
+     * ##    Tests for saveEmployee method  ##
+     * #######################################
+     */
+    @Test
+    void saveEmployee_ShouldThrowException_WhenRequiredDataIsNotPresent() {
+        // Arrange
+        defaultUser.setPassword(null);
+
+        // Act - Assert
+        assertThrows(MissingDataException.class, () -> userUseCase.saveEmployee(defaultUser));
+    }
+
+    @Test
+    void saveEmployee_ShouldThrowException_WhenEmailIsNotValid() {
+        // Arrange
+        defaultUser.setEmail("wrongemail.com");
+
+        // Act - Assert
+        assertThrows(InvalidFormatException.class, () -> userUseCase.saveEmployee(defaultUser));
+    }
+
+    @Test
+    void saveEmployee_ShouldThrowException_WhenPhoneNumberIsNotValid() {
+        // Arrange
+        defaultUser.setPhoneNumber("+57 (301) 12345567");
+
+        // Act - Assert
+        assertThrows(InvalidFormatException.class, () -> userUseCase.saveEmployee(defaultUser));
+    }
+
+    @Test
+    void saveEmployee_ShouldSaveUser_WhenEverythingIsOk() {
+        // Arrange
+        String encodedPassword = "3nc0d3dp4ssw0rd";
+
+        when(bcryptEncoderPortMock.encode(anyString())).thenReturn(encodedPassword);
+
+        // Act - Assert
+        assertDoesNotThrow(() -> userUseCase.saveEmployee(defaultUser));
+        assertEquals(Role.EMPLOYEE, defaultUser.getRole());
         assertEquals(encodedPassword, defaultUser.getPassword());
 
         verify(bcryptEncoderPortMock).encode(anyString());
