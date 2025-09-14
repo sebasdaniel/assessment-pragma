@@ -39,6 +39,7 @@ public class SecurityConfig {
                         .antMatchers("/api/v1/auth/**").permitAll()
                         .antMatchers(HttpMethod.GET,"/api/v1/user/**").permitAll()
                         .antMatchers("/api/v1/user/owner").hasRole(Role.ADMIN)
+                        .antMatchers("/api/v1/user/employee").hasRole(Role.OWNER)
                         .anyRequest().authenticated()
                 );
 
