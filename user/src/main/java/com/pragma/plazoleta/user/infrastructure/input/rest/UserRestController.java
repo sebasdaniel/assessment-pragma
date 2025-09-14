@@ -20,7 +20,7 @@ public class UserRestController {
 
     private final IUserHandler userHandler;
 
-    @Operation(summary = "Add a new user")
+    @Operation(summary = "Add a new owner user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "User created", content = @Content),
             @ApiResponse(responseCode = "409", description = "User already exists", content = @Content)
@@ -31,6 +31,22 @@ public class UserRestController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @Operation(summary = "Add a new employee user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "User created", content = @Content),
+            @ApiResponse(responseCode = "409", description = "User already exists", content = @Content)
+    })
+    @PostMapping("/employee")
+    public ResponseEntity<Void> saveUserEmployee(@Valid @RequestBody UserRequestDto userRequestDto) {
+        userHandler.saveUserEmployee(userRequestDto);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @Operation(summary = "Get a user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User found", content = @Content),
+            @ApiResponse(responseCode = "404", description = "User not found", content = @Content)
+    })
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDto> getUser(@PathVariable Long id) {
         return ResponseEntity.ok(userHandler.getUser(id));
