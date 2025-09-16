@@ -29,5 +29,5 @@ public class DishRequestDto {
     @NotNull(message = "Must provide a restaurant id that the dish belongs to")
     private Long restaurantId;
 
-    private Long creatorId;
+    private Long callerId;
 }

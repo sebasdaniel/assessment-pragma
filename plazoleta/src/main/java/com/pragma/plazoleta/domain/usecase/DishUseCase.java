@@ -68,8 +68,8 @@ public class DishUseCase implements IDishServicePort {
     }
 
     @Override
-    public void changeDishStatus(Long dishId, Boolean status, Long userId) {
-        if (isNull(dishId) || isNull(status) || isNull(userId)) {
+    public void changeDishStatus(Long dishId, Boolean active, Long userId) {
+        if (isNull(dishId) || isNull(active) || isNull(userId)) {
             throw new RequiredDataException(REQUIRED_DATA_EXCEPTION);
         }
 
@@ -79,7 +79,7 @@ public class DishUseCase implements IDishServicePort {
             throw new DomainException(RESTAURANT_AND_OWNER_NOT_MATCH_EXCEPTION);
         }
 
-        savedDish.setActive(status);
+        savedDish.setActive(active);
         dishPersistencePort.saveDish(savedDish);
     }
 

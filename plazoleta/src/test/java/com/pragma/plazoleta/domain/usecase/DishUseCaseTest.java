@@ -182,10 +182,10 @@ class DishUseCaseTest {
     void changeDishStatus_ShouldThrowRequiredDataException_WhenSomeDataIsNull() {
         // Arrange
         Long dishId = 1L;
-        Boolean status = true;
+        Boolean active = true;
 
         // Act - Assert
-        assertThrows(RequiredDataException.class, () -> dishUseCase.changeDishStatus(dishId, status, null));
+        assertThrows(RequiredDataException.class, () -> dishUseCase.changeDishStatus(dishId, active, null));
         verify(dishPersistencePortMock, never()).getDish(anyLong());
         verify(restaurantServicePortMock, never()).matchOwner(anyLong(), anyLong());
         verify(dishPersistencePortMock, never()).saveDish(any(Dish.class));
@@ -195,21 +195,21 @@ class DishUseCaseTest {
     void changeDishStatus_ShouldThrowDomainException_WhenRestaurantDoesNotMatchUser() {
         // Arrange
         Long dishId = 1L;
-        Boolean status = true;
+        Boolean active = true;
         Long userId = 1L;
 
         when(dishPersistencePortMock.getDish(dishId)).thenReturn(defaulDish);
         when(restaurantServicePortMock.matchOwner(defaulDish.getRestaurantId(), userId)).thenReturn(false);
 
         // Act - Assert
-        assertThrows(DomainException.class, () -> dishUseCase.changeDishStatus(dishId, status, userId));
+        assertThrows(DomainException.class, () -> dishUseCase.changeDishStatus(dishId, active, userId));
         verify(dishPersistencePortMock).getDish(dishId);
         verify(dishPersistencePortMock, never()).saveDish(any(Dish.class));
     }
 
     @ParameterizedTest
     @ValueSource(booleans = {true, false})
-    void changeDishStatus_ShouldChangeStatus_WhenEverythingIsOk(Boolean status) {
+    void changeDishStatus_ShouldChangeStatus_WhenEverythingIsOk(Boolean active) {
         // Arrange
         Long dishId = 1L;
         Long userId = 1L;
@@ -218,8 +218,8 @@ class DishUseCaseTest {
         when(restaurantServicePortMock.matchOwner(defaulDish.getRestaurantId(), userId)).thenReturn(true);
 
         // Act - Assert
-        assertDoesNotThrow(() -> dishUseCase.changeDishStatus(dishId, status, userId));
-        assertEquals(status, defaulDish.getActive());
+        assertDoesNotThrow(() -> dishUseCase.changeDishStatus(dishId, active, userId));
+        assertEquals(active, defaulDish.getActive());
         verify(dishPersistencePortMock).getDish(dishId);
         verify(restaurantServicePortMock).matchOwner(anyLong(), anyLong());
         verify(dishPersistencePortMock).saveDish(any(Dish.class));
