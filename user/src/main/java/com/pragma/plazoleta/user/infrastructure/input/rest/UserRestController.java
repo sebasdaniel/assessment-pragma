@@ -42,6 +42,17 @@ public class UserRestController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @Operation(summary = "Add a new client user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "User created", content = @Content),
+            @ApiResponse(responseCode = "409", description = "User already exists", content = @Content)
+    })
+    @PostMapping("/client")
+    public ResponseEntity<Void> saveUserClient(@Valid @RequestBody UserRequestDto userRequestDto) {
+        userHandler.saveUserClient(userRequestDto);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
     @Operation(summary = "Get a user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User found", content = @Content),

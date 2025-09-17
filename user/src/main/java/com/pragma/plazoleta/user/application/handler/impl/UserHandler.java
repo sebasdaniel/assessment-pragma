@@ -33,6 +33,12 @@ public class UserHandler implements IUserHandler {
     }
 
     @Override
+    public void saveUserClient(UserRequestDto userRequestDto) {
+        User user = userRequestMapper.toUser(userRequestDto);
+        userServicePort.saveClient(user);
+    }
+
+    @Override
     public UserResponseDto getUser(Long id) {
         User user = userServicePort.getUser(id);
         return userResponseMapper.toResponse(user);
