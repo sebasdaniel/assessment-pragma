@@ -36,7 +36,7 @@ public class SecurityConfig {
                         sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .antMatchers("/api/v1/auth/**").permitAll()
+                        .antMatchers("/api/v1/auth/**", "/api/v1/user/client").permitAll()
                         .antMatchers(HttpMethod.GET,"/api/v1/user/**").permitAll()
                         .antMatchers("/api/v1/user/owner").hasRole(Role.ADMIN)
                         .antMatchers("/api/v1/user/employee").hasRole(Role.OWNER)
