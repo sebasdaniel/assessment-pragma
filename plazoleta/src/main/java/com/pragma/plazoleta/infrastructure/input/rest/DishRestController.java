@@ -1,5 +1,6 @@
 package com.pragma.plazoleta.infrastructure.input.rest;
 
+import com.pragma.plazoleta.application.dto.request.ChangeDishStatusRequestDto;
 import com.pragma.plazoleta.application.dto.request.DishRequestDto;
 import com.pragma.plazoleta.application.dto.request.UpdateDishRequestDto;
 import com.pragma.plazoleta.application.dto.response.DishResponseDto;
@@ -38,7 +39,7 @@ public class DishRestController {
             @Valid @RequestBody DishRequestDto dishRequestDto
     ) {
         Long userId = userDetails.getUserId();
-        dishRequestDto.setCreatorId(userId);
+        dishRequestDto.setCallerId(userId);
         dishHandler.saveDish(dishRequestDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -53,8 +54,23 @@ public class DishRestController {
             @Valid @RequestBody UpdateDishRequestDto dishRequestDto
     ) {
         Long userId = userDetails.getUserId();
-        dishRequestDto.setCreatorId(userId);
-        var dishResponseDto = dishHandler.updateDish(dishRequestDto);
+        dishRequestDto.setCallerId(userId);
+        DishResponseDto dishResponseDto = dishHandler.updateDish(dishRequestDto);
         return new ResponseEntity<>(dishResponseDto, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Enable/Disable a dish")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Dish status changed", content = @Content),
+    })
+    @PutMapping("/status")
+    public ResponseEntity<Void> changeDishStatus(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @Valid @RequestBody ChangeDishStatusRequestDto dishRequestDto
+    ) {
+        Long userId = userDetails.getUserId();
+        dishRequestDto.setCallerId(userId);
+        dishHandler.changeDishStatus(dishRequestDto);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
