@@ -32,23 +32,25 @@ public class UserUseCase implements IUserServicePort {
 
     @Override
     public void saveOwner(User user) {
-        validateUser(user, Role.OWNER);
-
-        String encodedPassword = passwordEncoderPort.encode(user.getPassword());
-
-        user.setRole(Role.OWNER);
-        user.setPassword(encodedPassword);
-
-        userPersistencePort.saveUser(user);
+        saveUser(user, Role.OWNER);
     }
 
     @Override
     public void saveEmployee(User user) {
-        validateUser(user, Role.EMPLOYEE);
+        saveUser(user, Role.EMPLOYEE);
+    }
+
+    @Override
+    public void saveClient(User user) {
+        saveUser(user, Role.CLIENT);
+    }
+
+    private void saveUser(User user, String role) {
+        validateUser(user, role);
+
+        user.setRole(role);
 
         String encodedPassword = passwordEncoderPort.encode(user.getPassword());
-
-        user.setRole(Role.EMPLOYEE);
         user.setPassword(encodedPassword);
 
         userPersistencePort.saveUser(user);

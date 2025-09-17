@@ -8,5 +8,7 @@ public interface IUserServicePort {
 
     void saveEmployee(User user);
 
+    void saveClient(User user);
+
     User getUser(Long id);
 }

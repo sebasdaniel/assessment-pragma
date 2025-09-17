@@ -145,4 +145,51 @@ class UserUseCaseTest {
         verify(bcryptEncoderPortMock).encode(anyString());
     }
 
+    /**
+     * #######################################
+     * ##    Tests for saveClient method    ##
+     * #######################################
+     */
+    @Test
+    void saveClient_ShouldThrowException_WhenRequiredDataIsNotPresent() {
+        // Arrange
+        defaultUser.setPassword(null);
+
+        // Act - Assert
+        assertThrows(MissingDataException.class, () -> userUseCase.saveClient(defaultUser));
+    }
+
+    @Test
+    void saveClient_ShouldThrowException_WhenEmailIsNotValid() {
+        // Arrange
+        defaultUser.setEmail("wrongemail.com");
+
+        // Act - Assert
+        assertThrows(InvalidFormatException.class, () -> userUseCase.saveClient(defaultUser));
+    }
+
+    @Test
+    void saveClient_ShouldThrowException_WhenPhoneNumberIsNotValid() {
+        // Arrange
+        defaultUser.setPhoneNumber("+57 301-123-45567");
+
+        // Act - Assert
+        assertThrows(InvalidFormatException.class, () -> userUseCase.saveClient(defaultUser));
+    }
+
+    @Test
+    void saveClient_ShouldSaveUser_WhenEverythingIsOk() {
+        // Arrange
+        String encodedPassword = "3nc0d3dp4ssw0rd";
+
+        when(bcryptEncoderPortMock.encode(anyString())).thenReturn(encodedPassword);
+
+        // Act - Assert
+        assertDoesNotThrow(() -> userUseCase.saveClient(defaultUser));
+        assertEquals(Role.CLIENT, defaultUser.getRole());
+        assertEquals(encodedPassword, defaultUser.getPassword());
+
+        verify(bcryptEncoderPortMock).encode(anyString());
+    }
+
 }
