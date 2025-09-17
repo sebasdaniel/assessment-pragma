@@ -36,7 +36,7 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         .antMatchers("/api/v1/restaurant").hasRole(Role.ADMIN)
-                        .antMatchers("/api/v1/dish").hasRole(Role.OWNER)
+                        .antMatchers("/api/v1/dish", "/api/v1/dish/status").hasRole(Role.OWNER)
                         .anyRequest().authenticated()
                 );
 
